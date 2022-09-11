@@ -1,10 +1,10 @@
 import './App.css';
-import Navbar from './components/navbar/Navbar';
+import Tasks_Index from './components/tasks/Index';
 
 const App = () => {
   return (
     <div className='container d-block mx-auto p-1 mt-1'>
-      <Navbar />
+      <Tasks_Index />
     </div>
   );
 }

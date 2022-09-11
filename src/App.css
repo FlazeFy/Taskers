@@ -2,3 +2,12 @@
   max-width: 720px;
   padding: 10px;
 }
+.text-primary{
+  color: #2a6fdb !important;
+}
+.text-danger{
+  color: #e74645 !important;
+}
+.text-warning{
+  color: #f68a24 !important;
+}
