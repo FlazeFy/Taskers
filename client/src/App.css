@@ -11,3 +11,37 @@
 .text-warning{
   color: #f68a24 !important;
 }
+.btn-success{
+  background: #309975 !important;
+}
+.btn-delete{
+  color: #e74645; 
+}
+.btn-delete:hover{
+  background: #e74645; 
+  color: whitesmoke;
+}
+.btn-add-new{
+  border: none;
+  background: transparent;
+  color:#309975;
+  font-size: 14px;
+  margin-inline:10px;
+  cursor:pointer;
+  text-decoration: none;
+}
+.btn-reset{
+  border: none;
+  background: transparent;
+  color:#e74645;
+  font-size: 14px;
+  margin-inline:10px;
+  cursor:pointer;
+  text-decoration: none;
+}
+.form-control{
+  border-radius: 15px !important;
+}
+textarea{
+  height: 100px !important;
+}

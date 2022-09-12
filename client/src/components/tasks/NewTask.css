@@ -1,0 +1,20 @@
+.btn-close{
+    top:15px;
+    left: 47.5%;
+}
+.input-info-desc{
+    right: -360%;
+    font-weight: 500;
+    font-size: 15px;
+}
+.input-info-price{
+    right: -350%;
+    font-weight: 500;
+    font-size: 15px;
+}
+.tags-icon{
+    bottom: 5px !important;
+    left: -3px;
+    font-weight: bold;
+    font-size: 17px;
+}

@@ -67,13 +67,12 @@
     display: inline-block;
     margin: 0 5px 5px 5px;
     font-size: 15px;
-    font-weight: 600;
     line-height: 1;
     padding: 7px 10px;
     text-transform: uppercase;
     text-align: center;
     transition: all 0.3s ease-in-out;
 }
-.content #filters li:hover, .content #filters li.filter-active {
+.content #filters button:hover, .content #filters button.filter-active {
     color: #2a6fdb;
 }

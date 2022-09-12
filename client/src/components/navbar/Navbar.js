@@ -35,7 +35,7 @@ const Navbar = () => {
                 </div>
             </nav>
             <span className='position-absolute btn-wrap-task'>
-                <button className='btn-task' title='Add New Task'><FontAwesomeIcon icon="fa-plus" /></button>
+                <button className='btn-task' title='Add New Task' data-bs-toggle='modal' data-bs-target='#new_task_modal'><FontAwesomeIcon icon="fa-plus" /></button>
             </span>
             <span className='position-absolute btn-wrap-sign-out'>
                 <button className='btn-sign-out' title='Sign Out'><FontAwesomeIcon icon="fa-right-from-bracket" /></button>
