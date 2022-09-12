@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 
 //Get all assigned tasks
 router.get('/getAllTask', (req, res) => {
-    connection.query('SELECT * FROM task ORDER BY created_at ASC', (error, rows, fields) => {
+    connection.query('SELECT * FROM task ORDER BY created_at DESC', (error, rows, fields) => {
         if (error) {
             res.status(500).send(error)
         } else {

@@ -17,6 +17,7 @@ library.add( faSquareCheck, faClock, faUser, faGift, faHashtag, faAngleDown );
 const Assigned = () => {
     //Initial variable
     const [tasks, setTaskList] = useState([]);
+    const id_key = 1; //user id for now
 
     useEffect(() => {
         getAllTask();
@@ -30,18 +31,22 @@ const Assigned = () => {
 
     //Converter
     const data = Object.values(tasks);
-    console.log(data[2]);
+    //console.log(data);
 
     //Date convert
     function dateConverter(datetime){
         const result = new Date(datetime);
-        const now = new Date();
+        const now = new Date(Date.now());
         
         //FIx this!!!
-        if(result.getFullYear + "" + (result.getMonth + 1) + "" + result.getDate == now.getFullYear + "" + (now.getMonth + 1) + "" + now.getDate){
-            return " " + result.getFullYear() + "/" + (result.getMonth() + 1) + "/" + result.getDate() + " " + result.getHours() + ":" + result.getMinutes();    
+        if(result.toDateString() === now.toDateString()){
+            if(result.getHours === now.getHours){
+                return " " + result.getHours() + ":" + result.getMinutes();    
+            } else {
+                return " " + result.getHours() + ":" + result.getMinutes();    
+            }
         } else {
-            return " " + result.getHours() + ":" + result.getMinutes();    
+            return " " + result.getFullYear() + "/" + (result.getMonth() + 1) + "/" + result.getDate() + " " + result.getHours() + ":" + result.getMinutes();  
         }
     }
 
@@ -65,9 +70,72 @@ const Assigned = () => {
         }
     }
 
+    //Get task person assigne
+    function getAssigne(assigne){
+        if(assigne == id_key){
+            return (
+                <button className='card tasks-icon-box text-participant'>
+                    <FontAwesomeIcon icon="fa-regular fa-user" size='lg' /> You
+                </button>
+            );
+        } else {
+            //Converter
+            const data_assigne = JSON.parse(assigne);
+            // console.log(data_assigne);
+
+            return (
+                <button className='card tasks-icon-box text-participant'>
+                    <FontAwesomeIcon icon="fa-regular fa-user" size='lg' /> You and {data_assigne.length - 1} others
+                </button>
+            );
+        }
+    }
+
+    //Get task check
+    function getCheck(check){
+        if(check == null){
+            return null;
+        } else {
+            //Converter
+            const data_check = JSON.parse(check);
+            // console.log(data_check);
+
+            return (
+                <button className='card tasks-icon-box text-check'>
+                    <FontAwesomeIcon icon="fa-regular fa-square-check" size='lg' /> 0/{data_check.length} Subtasks
+                </button>
+            );
+        }
+    }
+
+    //Get task tag
+    function getHashtag(tag){
+        if(tag == null){
+            return null;
+        } else {
+            //Converter
+            const data_tag = JSON.parse(tag);
+            // console.log(data_tag);
+
+            return (
+                <span>
+                    {
+                    data_tag.map((val, index) => {
+                        return (
+                            <button className='card tasks-icon-box text-optional'>
+                                <FontAwesomeIcon icon="fa-solid fa-hashtag" />{val.tag}
+                            </button>
+                        );
+                    })
+                    }
+                </span>
+            )
+        }
+    }
+
     return (
         <div className='container'>
-            <h6 className='text-center'>(4) My Task</h6>
+            <h6 className='text-center'>({data.length}) My Task</h6>
             <div className='row'>
                 <div className='col-lg-6 col-md-6 col-sm-12'>
                     <div className='row px-2'>
@@ -83,19 +151,10 @@ const Assigned = () => {
                                             {getTaskUrl(val.task_url)}
                                             <p className='tasks-desc'>{val.task_desc}</p>
 
-                                            <button className='card tasks-icon-box text-participant'>
-                                                <FontAwesomeIcon icon="fa-regular fa-user" size='lg' /> You and 4 other
-                                            </button>
-                                            <button className='card tasks-icon-box text-check'>
-                                                <FontAwesomeIcon icon="fa-regular fa-square-check" size='lg' /> 0/2 Subtasks
-                                            </button>
+                                            {getAssigne(val.task_assigne)}
+                                            {getCheck(val.task_check)}
                                             {getTaskPrize(val.task_prize)}
-                                            <button className='card tasks-icon-box text-optional'>
-                                                <FontAwesomeIcon icon="fa-solid fa-hashtag" />Optional
-                                            </button>
-                                            <button className='card tasks-icon-box text-optional'>
-                                                <FontAwesomeIcon icon="fa-solid fa-hashtag" />Housework
-                                            </button>
+                                            {getHashtag(val.task_tag)}
 
                                         </button>
                                     </div>
