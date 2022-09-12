@@ -56,3 +56,24 @@
     border-radius: 10px;
     margin: 5px;
 }
+
+/*Tasks box*/
+.content #filters {
+    list-style: none;
+    margin-bottom: 10px;
+}
+.content #filters li {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 5px 5px 5px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 7px 10px;
+    text-transform: uppercase;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+}
+.content #filters li:hover, .content #filters li.filter-active {
+    color: #2a6fdb;
+}

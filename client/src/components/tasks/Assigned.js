@@ -11,10 +11,30 @@ import { faGift, faHashtag, faAngleDown } from "@fortawesome/free-solid-svg-icon
 
 import { useState, useEffect } from "react";
 import Axios from "axios";
+import Isotope from "isotope-layout";
 
 library.add( faSquareCheck, faClock, faUser, faGift, faHashtag, faAngleDown );
 
 const Assigned = () => {
+    //Isotope layout
+    var grid = document.querySelector('.content-container');
+    var iso = new Isotope( grid, {
+        itemSelector: '.content-item',
+    });
+
+    // bind filter button click
+    // var filtersElem = document.querySelector('.filters-button-group');
+    // filtersElem.addEventListener( 'click', function( event ) {
+    // // only work with buttons
+    // if ( !matchesSelector( event.target, 'button' ) ) {
+    //     return;
+    // }
+    // var filterValue = event.target.getAttribute('data-filter');
+    // // use matching filter function
+    // filterValue = filterValue;
+    // iso.arrange({ filter: filterValue });
+    // });
+
     //Initial variable
     const [tasks, setTaskList] = useState([]);
     const id_key = 1; //user id for now
@@ -134,16 +154,21 @@ const Assigned = () => {
     }
 
     return (
-        <div className='container'>
-            <h6 className='text-center'>({data.length}) My Task</h6>
-            <div className='row'>
-                <div className='col-lg-6 col-md-6 col-sm-12'>
-                    <div className='row px-2'>
-                        {
-                            data.map((val, index) => {
-                                //{id, created_at, updated_at}
-                                //<img src={tes} className='tasks-img'></img>
-                                return (
+        <section id="content" className="content">
+            <div className="container">
+                <h6 className='text-center'>({data.length}) My Task</h6>
+                <ul id="content-flters" className="d-flex justify-content-center">
+                    <li data-filter="*" className="filter-active">All</li>
+                    <li data-filter=".filter-class">Classroom</li>
+                    <li data-filter=".filter-pinned">Pinned</li>
+                </ul>
+                <div className='row content-container'>
+                    {
+                        data.map((val, index) => {
+                            //{id, created_at, updated_at}
+                            //<img src={tes} className='tasks-img'></img>
+                            return (
+                                <div className='col-lg-6 col-md-6 col-sm-12 content-item filter-class'>
                                     <div className='card border-0 mt-3 rounded shadow p-0 w-100 position-relative'>
                                         <button className='m-0 p-3 border-0 bg-transparent text-start' type='submit'>
                                             <h6 className='position-absolute tasks-date'><FontAwesomeIcon icon="fa-regular fa-clock" />{dateConverter(val.created_at)}</h6>
@@ -158,17 +183,14 @@ const Assigned = () => {
 
                                         </button>
                                     </div>
-                                );
-                            })
-                        }
-                    </div>
+                                </div>
+                            );
+                        })
+                    }
                 </div>
-                <div className='col-lg-6 col-md-6 col-sm-12'>
-                    
-                </div>
+                <button className='btn-more-content'><FontAwesomeIcon icon="fa-solid fa-angle-down" /> Show More</button>
             </div>
-            <button className='btn-more-content'><FontAwesomeIcon icon="fa-solid fa-angle-down" /> Show More</button>
-        </div>
+        </section>
     );
 }
 
