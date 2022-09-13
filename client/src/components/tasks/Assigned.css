@@ -56,6 +56,67 @@
     margin: 1.5px;
     padding: 5px;
 }
+.btn-check-detail{
+    color: #212121 !important;
+    font-size: 14px;
+    list-style-image: none;
+    list-style: none;
+    list-style-type: none;
+    padding: 3px 6px;
+    border-radius: 8px;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+}
+.btn-check-detail.finish{
+    text-decoration: line-through;
+    color: grey !important;
+}
+.btn-check-detail:hover{
+    background: #EAECF0;
+}
+
+.form-check-input{
+    width: 20px;
+    height: 20px;
+}
+.form-check-input:checked {
+    background-color: green!important;
+    border: none;
+}
+.edit_check_box{
+    border: 1.5px solid #c7c9cc;
+    border-radius: 8px;
+    background: #EAECF0;
+    position: relative;
+}
+.form-check-edit{
+    border: none;
+    background: none;
+    font-size: 14px;
+}
+.form-check-edit:focus{
+    outline: none !important;
+}
+.btn-close-clps{
+    color:#808080; 
+    cursor: pointer;
+}
+.btn-close-clps:hover{
+    color: #e74645;  
+}
+.btn-delete-check{
+    color: #e74645;  
+    padding: 5px 10px;
+    right: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.btn-delete-check:hover{
+    color: whitesmoke;
+    background: #e74645;  
+}
 
 .tasks-img{
     width: 100%;
