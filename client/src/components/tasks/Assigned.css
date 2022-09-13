@@ -50,6 +50,12 @@
     font-weight: 500;
     color: #2a6fdb;
 }
+.btn-detail{
+    text-decoration: none !important;
+    border-radius: 6px;
+    margin: 1.5px;
+    padding: 5px;
+}
 
 .tasks-img{
     width: 100%;

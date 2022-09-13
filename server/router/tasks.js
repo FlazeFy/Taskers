@@ -18,4 +18,29 @@ router.get('/getAllTask', (req, res) => {
     })
 })
 
+//Add new tasks
+router.post('/insertTask/:id', (req, res) => {
+    const id = req.params.id;
+    const title = req.body.title
+    const desc = req.body.desc
+    const prize = req.body.prize
+    const check = req.body.check
+    const tag = req.body.tag
+    const created_at = new Date()
+    const updated_at = new Date()
+
+    //Task assigne is id user only and task url is null for now.
+
+    connection.query("INSERT INTO " +
+        "task (id, id_user, task_assigne, task_title, task_desc, task_url, task_check, task_prize, task_tag, created_at, updated_at) " +
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+        [null, id, id, title, desc, null, check, prize, tag, created_at, updated_at], (error, rows, fields) => {
+        if (error) {
+            res.status(400).json({ msg: "Error :" + error })
+        } else {
+            res.status(200).json({ msg: "Insert Tasks Success",status:200, data: rows })
+        }
+    })
+})
+
 module.exports = router

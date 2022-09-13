@@ -77,13 +77,13 @@ const Assigned = () => {
         }
     }
 
-    //Show task image
+    //Get task prize
     function getTaskPrize(prize){
         if(prize != null){
            return (
-                <button className='card tasks-icon-box text-gift'>
+                <a className='btn-detail tasks-icon-box text-gift'>
                     <FontAwesomeIcon icon="fa-solid fa-gift" size='lg' /> Rp. 20K
-                </button>
+                </a>
            );
         }
     }
@@ -92,9 +92,9 @@ const Assigned = () => {
     function getAssigne(assigne){
         if(assigne == id_key){
             return (
-                <button className='card tasks-icon-box text-participant'>
+                <a className='btn-detail tasks-icon-box text-participant'>
                     <FontAwesomeIcon icon="fa-regular fa-user" size='lg' /> You
-                </button>
+                </a>
             );
         } else {
             //Converter
@@ -102,9 +102,9 @@ const Assigned = () => {
             // console.log(data_assigne);
 
             return (
-                <button className='card tasks-icon-box text-participant'>
+                <a className='btn-detail tasks-icon-box text-participant'>
                     <FontAwesomeIcon icon="fa-regular fa-user" size='lg' /> You and {data_assigne.length - 1} others
-                </button>
+                </a>
             );
         }
     }
@@ -115,13 +115,14 @@ const Assigned = () => {
             return null;
         } else {
             //Converter
-            const data_check = JSON.parse(check);
+            let result = check.replace(/'/g, '"');
+            const data_check = JSON.parse(result);
             // console.log(data_check);
 
             return (
-                <button className='card tasks-icon-box text-check'>
+                <a className='btn-detail tasks-icon-box text-check'>
                     <FontAwesomeIcon icon="fa-regular fa-square-check" size='lg' /> 0/{data_check.length} Subtasks
-                </button>
+                </a>
             );
         }
     }
@@ -140,9 +141,9 @@ const Assigned = () => {
                     {
                     data_tag.map((val, index) => {
                         return (
-                            <button className='card tasks-icon-box text-optional'>
+                            <a className='btn-detail tasks-icon-box text-optional'>
                                 <FontAwesomeIcon icon="fa-solid fa-hashtag" />{val.tag}
-                            </button>
+                            </a>
                         );
                     })
                     }
@@ -164,11 +165,12 @@ const Assigned = () => {
                 </ul>
                 <div className='row content-container'>
                     {
-                        data.map((val, index) => {
+                        data.map((val, i, index) => {
                             //{id, created_at, updated_at}
                             //<img src={tes} className='tasks-img'></img>
-                            return (
-                                <div className='col-lg-6 col-md-6 col-sm-12 content-item filter-mytask'>
+                            i++;
+                            return ( //Key still error
+                                <div key={i} className='col-lg-6 col-md-6 col-sm-12 content-item filter-mytask'>
                                     <div className='card border-0 mt-3 rounded shadow p-0 w-100 position-relative'>
                                         <button className='m-0 p-3 border-0 bg-transparent text-start' type='submit'>
                                             <h6 className='position-absolute tasks-date'><FontAwesomeIcon icon="fa-regular fa-clock" />{dateConverter(val.created_at)}</h6>
