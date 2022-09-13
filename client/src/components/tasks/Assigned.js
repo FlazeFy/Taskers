@@ -9,14 +9,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquareCheck, faClock, faUser } from "@fortawesome/free-regular-svg-icons";
 import { faGift, faHashtag, faAngleDown, faXmark, faTrash } from "@fortawesome/free-solid-svg-icons";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Axios from "axios";
 import Isotope from "isotope-layout";
 import matchesSelector from 'desandro-matches-selector';
 
 library.add( faSquareCheck, faClock, faUser, faGift, faHashtag, faAngleDown, faXmark, faTrash );
 
-const Assigned = () => {
+const Assigned = (props) => {
     //Isotope layout
     // var grid = document.querySelector('.content-container');
     // var iso = new Isotope( grid, {
@@ -36,6 +36,32 @@ const Assigned = () => {
     //Initial variable
     const [tasks, setTaskList] = useState([]);
     const id_key = 1; //user id for now
+    const [desc, setDesc] = useState("");
+    //const [id, setId] = useState("");
+    const id_ref = useRef();
+    const [task_id, setId] = useState(props.task_id);
+
+    const editDesc = (e) => {
+        e.preventDefault();
+
+        const newId = id_ref.current.value;
+        setId(newId);
+
+        console.log(task_id);
+
+        // try {
+        //     await Axios.put("http://localhost:9000/updateDesc", {
+        //         desc,
+        //         task_id
+        //     });
+        // } catch (error) {
+        //     console.log(error.response);
+        // }
+        Axios.put("http://localhost:9000/updateDesc", {
+            desc,
+            task_id
+        });
+    };
 
     useEffect(() => {
         getAllTask();
@@ -196,8 +222,7 @@ const Assigned = () => {
                                     <button className='btn-check-detail' type='button' data-bs-toggle="collapse" data-bs-target={clps_call}>{val.detail}</button>
                                     <div className="collapse mt-2" id={clps_key} data-bs-parent={accrd_call}>
                                         <div className="edit_check_box p-2 position-relative">
-                                            <input required type="text" className="form-check-edit w-100 mb-3" id="floatingInput" 
-                                                placeholder={val.detail}></input>
+                                            <input required type="text" defaultValue={val.detail} className="form-check-edit w-100 mb-3" id="floatingInput"></input>
                                             <button type='submit' className='btn btn-success py-1' title='Save Check'>Save</button>
                                             <a className='btn-close-clps ms-3'><FontAwesomeIcon icon="fa-solid fa-xmark" size='lg' /></a>
                                             <a className='btn-delete-check position-absolute' title='Delete Check'><FontAwesomeIcon icon="fa-solid fa-trash" /></a>
@@ -232,6 +257,7 @@ const Assigned = () => {
                             i++;
                             const modal_id = "open-task-"+ val.id;
                             const modal_call = "#open-task-"+ val.id;
+                            const id_pass = val.id;
 
                             return ( //Key still error
                                 <div key={i} className='col-lg-6 col-md-6 col-sm-12 content-item filter-mytask'>
@@ -257,20 +283,24 @@ const Assigned = () => {
                                                     <h5 className='modal-title my-3 text-center' id='exampleModalLabel'>{val.task_title}</h5>
                                                     <div className='row'>
                                                         <div className='col-lg-6 col-md-12 col-sm-12'>
-                                                            <div className='card p-2'>
-                                                                <h6>Description</h6>
-                                                                <textarea type="text" className="form-check-edit" id="floatingInput"
-                                                                    placeholder={val.task_desc}></textarea>
-                                                                <button type='submit' className='btn btn-success py-1 mt-1 w-25' title='Save Check'>Save</button>
-                                                            </div>
-                                                            <div className='card mt-2 p-2'>
+                                                            {/* Edit description */}
+                                                            <form onSubmit={editDesc}>
+                                                                <div className='card mb-2 p-2'>
+                                                                    <h6>Description</h6>
+                                                                    <input defaultValue={val.id} ref={id_ref} name='task_id'></input>
+                                                                    <textarea type="text" className="form-check-edit" id="floatingInput"
+                                                                        defaultValue={val.task_desc} onChange={(e) => setDesc(e.target.value)}></textarea>
+                                                                    <button type='submit' className='btn btn-success py-1 mt-1 w-25' title='Save Check'>Save</button>
+                                                                </div>
+                                                            </form>
+                                                            <div className='card mb-2 p-2'>
                                                                 <h6>Tags</h6>
                                                                 {getHashtag(val.task_tag)}
                                                                 {getMsgNull(val.task_tag)}
                                                             </div>
                                                         </div>
                                                         <div className='col-lg-6 col-md-12 col-sm-12'>
-                                                            <div className='card p-2'>
+                                                            <div className='card mb-2 p-2'>
                                                                 <h6>Checklist</h6>
                                                                 {getCheckDetail(val.task_check, val.id)}
                                                                 {getMsgNull(val.task_check)}

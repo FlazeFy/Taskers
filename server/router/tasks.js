@@ -43,4 +43,22 @@ router.post('/insertTask/:id', (req, res) => {
     })
 })
 
+//Update task description
+router.put('/updateDesc', (req, res) => {
+    const desc = req.body.desc
+    const id = req.body.id
+    const updated_at = new Date()
+
+    connection.query("UPDATE " +
+        "task SET task_desc = ?, updated_at = ? " +
+        "WHERE id = ? ",
+        [desc, updated_at, id], (error, rows, fields) => {
+        if (error) {
+            res.status(400).json({ msg: "Error :" + error })
+        } else {
+            res.status(200).json({ msg: "Update Success",status:200, data: rows })
+        }
+    })
+})
+
 module.exports = router
