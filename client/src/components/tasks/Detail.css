@@ -1,0 +1,12 @@
+.form-control-custom-title{
+    font-weight: 500;
+    border: none;
+    margin-inline: auto;
+    display: block;
+    text-align: center;
+    width: 250px;
+}
+.form-control-custom-title:focus{
+    outline: none;
+    background: #f0f1f5 !important;
+}

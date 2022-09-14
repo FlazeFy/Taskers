@@ -15,11 +15,27 @@ const Detail = (props) => {
     const [desc, setDesc] = useState("");
     const [id, setId] = useState(""); //for task id
 
+    //Update task description
     const editDesc = async (e) => {
         e.preventDefault();
         try {
             await Axios.put("http://localhost:9000/updateDesc", {
                 desc,
+                id
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
+
+    //Update task title
+    async function editTitle (e) {
+        const title = e.target.value;
+        
+        e.preventDefault();
+        try {
+            await Axios.put("http://localhost:9000/updateTitle", {
+                title,
                 id
             });
         } catch (error) {
@@ -155,7 +171,8 @@ const Detail = (props) => {
                             <div className='modal-content border-0'>
                                 <div className='modal-body position-relative px-3 py-4'>
                                     <button type='button' className='btn-close position-absolute' data-bs-dismiss='modal' aria-label='Close'></button>
-                                    <h5 className='modal-title my-3 text-center' id='exampleModalLabel'>{val.task_title}</h5>
+                                    {/* Edit description */}
+                                    <input className='form-control-custom-title my-3' id='exampleModalLabel' defaultValue={val.task_title} onChange={(e) => setId(val.id)} onBlur={editTitle}></input>
                                     <div className='row'>
                                         <div className='col-lg-6 col-md-12 col-sm-12'>
                                             {/* Edit description */}
