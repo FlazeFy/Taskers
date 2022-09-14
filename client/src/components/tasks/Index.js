@@ -1,5 +1,6 @@
 import Navbar from '../navbar/Navbar';
 import Assigned from './Assigned';
+import Detail from './Detail';
 import NewTask from './NewTask';
 
 const Tasks_Index = () => {
@@ -8,6 +9,7 @@ const Tasks_Index = () => {
             <Navbar/>
             <Assigned/>
             <NewTask/>
+            <Detail/>
         </div>
     );
 }
