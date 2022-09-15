@@ -97,4 +97,27 @@ router.put('/updateCheck', (req, res) => {
     })
 })
 
+//Delete task tag
+router.put('/deleteTag', (req, res) => {
+    //Tag empty validator
+    var tag = null;
+    if(req.body.tag_old != null){
+        tag = JSON.stringify(req.body.tag_old)
+    }
+
+    const id = req.body.id_task
+    const updated_at = new Date()
+
+    connection.query("UPDATE " +
+        "task SET task_tag = ?, updated_at = ? " +
+        "WHERE id = ? ",
+        [tag, updated_at, id], (error, rows, fields) => {
+        if (error) {
+            res.status(400).json({ msg: "Error :" + error })
+        } else {
+            res.status(200).json({ msg: "Update Success",status:200, data: rows })
+        }
+    })
+})
+
 module.exports = router

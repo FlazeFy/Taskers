@@ -16,7 +16,8 @@ const Detail = (props) => {
     // const [task_check, setCheck] = useState("");
     const [id, setId] = useState(""); //for task id
     const [id_check, setIdCheck] = useState(""); //for task check
-    const [check_detail, setCheckDetail] = useState(""); //for task detail
+    const [check_detail, setCheckDetail] = useState(""); //for task check detail
+    const [tag_detail, setTagDetail] = useState(""); //for task tag detail
 
     //Update task description
     const editDesc = async (e) => {
@@ -57,6 +58,34 @@ const Detail = (props) => {
         }
     };
 
+    //Delete tag
+    async function deleteTag (e) {
+        e.preventDefault();
+
+        //Get value from tag detail
+        const id_tag_remove = tag_detail[0]; //By tag index in json
+        var tag_old = tag_detail[1];
+        var id_task = tag_detail[2]; 
+    
+        //Delete json element
+        if(tag_old.length == 1 ){
+            tag_old = null;
+        } else {
+            tag_old.splice(id_tag_remove, 1);
+        }
+        
+        //console.log(id_tag_remove);
+
+        try {
+            await Axios.put("http://localhost:9000/deleteTag", {
+                tag_old,
+                id_task
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
+
     //Update task title
     async function editTitle (e) {
         const title = e.target.value;
@@ -85,12 +114,13 @@ const Detail = (props) => {
     const data = Object.values(tasks);
 
     //Get task tag
-    function getHashtag(tag){
+    function getHashtag(tag, id_task){
         if(tag == null){
             return null;
         } else {
             //Converter
             const data_tag = JSON.parse(tag);
+
             // console.log(data_tag);
 
             return (
@@ -98,12 +128,21 @@ const Detail = (props) => {
                     {
                     data_tag.map((val, index) => {
                         return (
-                            <a className='btn-detail tasks-icon-box text-optional'>
-                                <FontAwesomeIcon icon="fa-solid fa-hashtag" />{val.tag}
-                            </a>
+                            <span className='box-tag'>
+                                <a className='btn-detail tasks-icon-box text-optional'>
+                                    <FontAwesomeIcon icon="fa-solid fa-hashtag" />{val.tag}
+                                </a>
+                                {/* Remove Task tag */}
+                                <form onSubmit={deleteTag} className='d-inline'>
+                                    <button className='btn-remove-tag' title='Remove this tag' type="submit" onClick={(e) => setTagDetail([index, data_tag, id_task])}><FontAwesomeIcon icon="fa-solid fa-trash" /></button>
+                                </form>
+                            </span>
                         );
                     })
                     }
+                    <a className='btn-add-tag px-2 py-1 rounded'>
+                        <FontAwesomeIcon icon="fa-solid fa-plus" /> Add Tag
+                    </a>
                 </span>
             )
         }
@@ -219,7 +258,7 @@ const Detail = (props) => {
                                             </form>
                                             <div className='card mb-2 p-2'>
                                                 <h6>Tags</h6>
-                                                {getHashtag(val.task_tag)}
+                                                {getHashtag(val.task_tag, val.id)}
                                                 {getMsgNull(val.task_tag)}
                                             </div>
                                         </div>

@@ -10,3 +10,21 @@
     outline: none;
     background: #f0f1f5 !important;
 }
+.tag-row{
+    display: inline-block;
+    float: left;
+}
+.btn-remove-tag{
+    color: #e74645;
+    margin-inline: 2px;
+    border: none;
+    background: none;
+}
+.btn-add-tag{
+    margin-inline-start: 10px;
+    cursor: pointer;
+    text-decoration: none !important;
+    font-size: 13px;
+    background: #309975 !important;
+    color:white !important;
+}
