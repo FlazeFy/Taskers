@@ -42,9 +42,11 @@
 .form-control{
   border-radius: 15px !important;
 }
-textarea{
-  height: 100px !important;
+textarea.edit{
   background: #f0f1f5 !important;
   border-radius: 6px;
   padding: 8px;
+}
+textarea {
+  height: 100px !important;
 }

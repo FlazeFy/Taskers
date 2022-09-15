@@ -13,7 +13,10 @@ const Detail = (props) => {
     const [tasks, setTaskList] = useState([]);
     const id_key = 1; //user id for now
     const [desc, setDesc] = useState("");
+    // const [task_check, setCheck] = useState("");
     const [id, setId] = useState(""); //for task id
+    const [id_check, setIdCheck] = useState(""); //for task check
+    const [check_detail, setCheckDetail] = useState(""); //for task detail
 
     //Update task description
     const editDesc = async (e) => {
@@ -21,6 +24,32 @@ const Detail = (props) => {
         try {
             await Axios.put("http://localhost:9000/updateDesc", {
                 desc,
+                id
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
+
+    //Update task check
+    const editCheck = async (e) => {
+        e.preventDefault();
+
+        //Make valid json
+        let result = check_detail[1].replace(/'/g, '"');
+        var data_check_d = JSON.parse(result);
+            
+        //Make new json[] value
+        var new_check = {id: id_check, detail: check_detail[0]};
+        
+        //Change old json
+        var check = data_check_d.map(r => r.id !== new_check.id ? r : new_check);
+        
+        //console.log(check);
+
+        try {
+            await Axios.put("http://localhost:9000/updateCheck", {
+                check,
                 id
             });
         } catch (error) {
@@ -119,7 +148,7 @@ const Detail = (props) => {
             //Converter
             let result = check.replace(/'/g, '"');
             const data_check_d = JSON.parse(result);
-            console.log(data_check_d);
+            //console.log(data_check_d);
 
             const accrd_key = "accrd_check_" + id_task;
             const accrd_call = "#accrd_check_"+ id_task;
@@ -140,12 +169,16 @@ const Detail = (props) => {
                                 <div className='col-11'>
                                     <button className='btn-check-detail' type='button' data-bs-toggle="collapse" data-bs-target={clps_call}>{val.detail}</button>
                                     <div className="collapse mt-2" id={clps_key} data-bs-parent={accrd_call}>
-                                        <div className="edit_check_box p-2 position-relative">
-                                            <input required type="text" defaultValue={val.detail} className="form-check-edit w-100 mb-3" id="floatingInput"></input>
-                                            <button type='submit' className='btn btn-success py-1' title='Save Check'>Save</button>
-                                            <a className='btn-close-clps ms-3'><FontAwesomeIcon icon="fa-solid fa-xmark" size='lg' /></a>
-                                            <a className='btn-delete-check position-absolute' title='Delete Check'><FontAwesomeIcon icon="fa-solid fa-trash" /></a>
-                                        </div>
+                                        {/* Edit Task checklist */}
+                                        <form onSubmit={editCheck}>
+                                            <div className="edit_check_box p-2 position-relative">
+                                                <input required type="text" defaultValue={val.detail} onBlur={(e) => setIdCheck(val.id)} onChange={(e) => setCheckDetail([e.target.value, check])} 
+                                                    className="form-check-edit w-100 mb-3"></input>
+                                                <button type='submit' onClick={(e) => setId(id_task)} className='btn btn-success py-1' title='Save Check'>Save</button>
+                                                <a className='btn-close-clps ms-3'><FontAwesomeIcon icon="fa-solid fa-xmark" size='lg' /></a>
+                                                <a className='btn-delete-check position-absolute' title='Delete Check'><FontAwesomeIcon icon="fa-solid fa-trash" /></a>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -179,7 +212,7 @@ const Detail = (props) => {
                                             <form onSubmit={editDesc}>
                                                 <div className='card mb-2 p-2'>
                                                     <h6>Description</h6>
-                                                    <textarea type="text" className="form-check-edit" id="floatingInput"
+                                                    <textarea type="text" className="form-check-edit edit" id="floatingInput"
                                                         defaultValue={val.task_desc} onChange={(e) => setDesc(e.target.value)}></textarea>
                                                     <button type='submit' onClick={(e) => setId(val.id)} className='btn btn-success py-1 mt-1 w-25' title='Save Check'>Save</button>
                                                 </div>
