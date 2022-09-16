@@ -3,11 +3,11 @@ import './Detail.css';
 //Font awesome icon
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faRightFromBracket, faBars } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faRightFromBracket, faBars, faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
 import Axios from "axios";
 
-library.add( faPlus, faRightFromBracket, faBars );
+library.add( faPlus, faRightFromBracket, faBars, faArrowsRotate );
 
 const Detail = (props) => {
     const [tasks, setTaskList] = useState([]);
@@ -114,8 +114,6 @@ const Detail = (props) => {
         }
     };
 
-
-
     //Update task title
     async function editTitle (e) {
         const title = e.target.value;
@@ -125,6 +123,49 @@ const Detail = (props) => {
             await Axios.put("http://localhost:9000/updateTitle", {
                 title,
                 id
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
+
+    //Update task due date
+    async function editDueDate (e) {
+        const due_date_old = new Date(id[1]);
+        const type = id[2]; // Type of due date change. "date" and "time"
+        const due_date_new = e.target.value;
+        const id_task = id[0];
+        var due_date;
+        
+        //console.log(id_task);
+        //Set update by its input type
+        if(type == "date"){
+            due_date = due_date_new + " " + due_date_old.getHours() + ":" + due_date_old.getMinutes();
+        } else {
+            due_date = due_date_old.getFullYear() + "-" + (due_date_old.getMonth() + 1) + "-" + due_date_old.getDate() + " " + due_date_new;
+        }
+
+        try {
+            await Axios.put("http://localhost:9000/updateDueDate", {
+                due_date,
+                id_task
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
+
+    //Update task due date (set null)
+    async function deleteDueDate (e) {
+        const due_date = null;
+        const id_task = id;
+        e.preventDefault();
+
+        //console.log(id);
+        try {
+            await Axios.put("http://localhost:9000/updateDueDate", {
+                due_date,
+                id_task
             });
         } catch (error) {
             console.log(error.response);
@@ -302,9 +343,21 @@ const Detail = (props) => {
                                                 {getCheckDetail(val.task_check, val.id)}
                                                 {getMsgNull(val.task_check)}
                                             </div>
+                                            <div className='card mb-2 p-2'>
+                                                <h6>Due Date</h6>
+                                                <div className='row'>
+                                                    {/* Delete due date */}
+                                                    <form onSubmit={deleteDueDate} className="form-reset-date me-2 p-2">
+                                                        <button className='btn-reset-date' onClick={(e) => setId(val.id)} type='submit'><FontAwesomeIcon icon="fa-solid fa-arrows-rotate" /></button>
+                                                    </form>
+                                                    {/* Edit due date */}
+                                                    <input type='date' className='form-control w-50 me-2' id='exampleModalLabel' defaultValue={val.due_date} onChange={(e) => setId([val.id, val.due_date, "date"])} onBlur={editDueDate}></input>
+                                                    <input type='time' className='form-control timepicker' id='exampleModalLabel' defaultValue={val.due_date} onChange={(e) => setId([val.id, val.due_date, "time"])} onBlur={editDueDate}></input>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <h6 className='position-absolute tasks-date'><FontAwesomeIcon icon="fa-regular fa-clock" />{dateConverter(val.created_at)}</h6>
+                                    <h6 className='position-absolute tasks-date'><FontAwesomeIcon icon="fa-regular fa-clock"/>{dateConverter(val.created_at)}</h6>
                                 </div>
                             </div>
                         </div>

@@ -97,6 +97,24 @@ router.put('/updateCheck', (req, res) => {
     })
 })
 
+//Update task due date
+router.put('/updateDueDate', (req, res) => {
+    const due_date = req.body.due_date
+    const id = req.body.id_task
+    const updated_at = new Date()
+
+    connection.query("UPDATE " +
+        "task SET due_date = ?, updated_at = ? " +
+        "WHERE id = ? ",
+        [due_date, updated_at, id], (error, rows, fields) => {
+        if (error) {
+            res.status(400).json({ msg: "Error :" + error })
+        } else {
+            res.status(200).json({ msg: "Update Success",status:200, data: rows })
+        }
+    })
+})
+
 //Delete task tag
 router.put('/deleteTag', (req, res) => {
     //Tag empty validator

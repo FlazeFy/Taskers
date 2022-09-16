@@ -28,9 +28,21 @@
     background: #309975 !important;
     color:white !important;
 }
+.btn-reset-date{
+    border: none;
+    background: none;
+    width: 45px;
+    color: #e74645;
+}
 .btn-delete-check{
     position: absolute;
     border: none;
     background: transparent;
     bottom:5px;
+}
+.form-reset-date{
+    width: 45px;
+}
+.timepicker{
+    width: 30%;
 }

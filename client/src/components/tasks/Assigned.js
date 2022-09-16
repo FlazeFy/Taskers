@@ -157,6 +157,16 @@ const Assigned = (props) => {
         }
     }
 
+    //Get due date
+    function getDueDate(datetime){
+        if(datetime == null){
+            return null;
+        } else {
+            const result = new Date(datetime);
+            return (<h6 className='tasks-date mt-2 mb-0'>Due until : {result.getFullYear()}/{result.getMonth() + 1}/{result.getDate()} {result.getHours()}:{result.getMinutes()}</h6>);
+        }
+    }
+
     return (
         <section id="content" className="content">
             <div className="container">
@@ -189,7 +199,7 @@ const Assigned = (props) => {
                                             {getCheck(val.task_check)}
                                             {getTaskPrize(val.task_prize)}
                                             {getHashtag(val.task_tag)}
-
+                                            {getDueDate(val.due_date)}
                                         </button>
                                     </div>
                                 </div>  
