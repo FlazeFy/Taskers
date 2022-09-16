@@ -120,4 +120,27 @@ router.put('/deleteTag', (req, res) => {
     })
 })
 
+//Delete task check
+router.put('/deleteCheck', (req, res) => {
+    //Check empty validator
+    var check = null;
+    if(req.body.check_old != null){
+        check = JSON.stringify(req.body.check_old)
+    }
+
+    const id = req.body.id_task
+    const updated_at = new Date()
+
+    connection.query("UPDATE " +
+        "task SET task_check = ?, updated_at = ? " +
+        "WHERE id = ? ",
+        [check, updated_at, id], (error, rows, fields) => {
+        if (error) {
+            res.status(400).json({ msg: "Error :" + error })
+        } else {
+            res.status(200).json({ msg: "Update Success",status:200, data: rows })
+        }
+    })
+})
+
 module.exports = router

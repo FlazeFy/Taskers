@@ -86,6 +86,36 @@ const Detail = (props) => {
         }
     };
 
+    //Delete check
+    async function deleteCheck (e) {
+        e.preventDefault();
+
+        //Get value from tag detail
+        const id_check_remove = check_detail[0]; //By tag index in json
+        var check_old = check_detail[1];
+        var id_task = check_detail[2]; 
+    
+        //Delete json element
+        if(check_old.length == 1 ){
+            check_old = null;
+        } else {
+            check_old.splice(id_check_remove, 1);
+        }
+        
+        //console.log(check_old);
+
+        try {
+            await Axios.put("http://localhost:9000/deleteCheck", {
+                check_old,
+                id_task
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
+
+
+
     //Update task title
     async function editTitle (e) {
         const title = e.target.value;
@@ -208,16 +238,20 @@ const Detail = (props) => {
                                 <div className='col-11'>
                                     <button className='btn-check-detail' type='button' data-bs-toggle="collapse" data-bs-target={clps_call}>{val.detail}</button>
                                     <div className="collapse mt-2" id={clps_key} data-bs-parent={accrd_call}>
-                                        {/* Edit Task checklist */}
-                                        <form onSubmit={editCheck}>
-                                            <div className="edit_check_box p-2 position-relative">
-                                                <input required type="text" defaultValue={val.detail} onBlur={(e) => setIdCheck(val.id)} onChange={(e) => setCheckDetail([e.target.value, check])} 
-                                                    className="form-check-edit w-100 mb-3"></input>
-                                                <button type='submit' onClick={(e) => setId(id_task)} className='btn btn-success py-1' title='Save Check'>Save</button>
-                                                <a className='btn-close-clps ms-3'><FontAwesomeIcon icon="fa-solid fa-xmark" size='lg' /></a>
-                                                <a className='btn-delete-check position-absolute' title='Delete Check'><FontAwesomeIcon icon="fa-solid fa-trash" /></a>
-                                            </div>
-                                        </form>
+                                        <div className="edit_check_box p-2 position-relative">
+                                            {/* Edit Task checklist */}
+                                            <form onSubmit={editCheck}>
+                                                    <input required type="text" defaultValue={val.detail} onBlur={(e) => setIdCheck(val.id)} onChange={(e) => setCheckDetail([e.target.value, check])} 
+                                                        className="form-check-edit w-100 mb-3"></input>
+                                                    <button type='submit' onClick={(e) => setId(id_task)} className='btn btn-success py-1' title='Save Check'>Save</button>
+                                                    <a className='btn-close-clps ms-3' data-bs-dismiss="collapse"><FontAwesomeIcon icon="fa-solid fa-xmark" size='lg' /></a>
+                                            </form>
+                                            {/* Remove Task checklist */}
+                                            <form onSubmit={deleteCheck} className='d-inline'>
+                                                <button className='btn-delete-check' title='Delete Check' type='submit' onClick={(e) => setCheckDetail([index, data_check_d, id_task])}><FontAwesomeIcon icon="fa-solid fa-trash" /></button>
+                                            </form>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>

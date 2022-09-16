@@ -28,3 +28,9 @@
     background: #309975 !important;
     color:white !important;
 }
+.btn-delete-check{
+    position: absolute;
+    border: none;
+    background: transparent;
+    bottom:5px;
+}
