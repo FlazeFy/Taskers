@@ -118,6 +118,37 @@ const Detail = (props) => {
         }
     };
 
+    //New Check
+    async function newCheck (e) {
+        e.preventDefault();
+
+        var id_task = check_detail[2]; 
+
+        if(check_detail[0] != null){
+            //Make valid json
+            let check_full = check_detail[0].replace(/'/g, '"');
+            var data_check = JSON.parse(check_full);  
+            
+            //Make new json[] value
+            var new_check = {id: data_check.length + 1, detail: check_detail[1]};
+            data_check[data_check.length] = new_check;
+            var check_old = data_check;   
+        } else {
+            var check_old = [{id: 1, detail: check_detail[1]}];
+        }       
+
+        //console.log(id_task);
+
+        try {
+            await Axios.put("http://localhost:9000/deleteCheck", {
+                check_old,
+                id_task
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
+
     //Delete check
     async function deleteCheck (e) {
         e.preventDefault();
@@ -304,8 +335,22 @@ const Detail = (props) => {
 
     //Get check detail
     function getCheckDetail(check, id_task){
+        const modal_key = "modal_check_add" + id_task;
+        const modal_call = "#modal_check_add"+ id_task;
+
         if(check == null){
-            return null;
+            return (
+            <span>
+                <a className='btn-add-tag px-2 py-1 rounded' data-bs-toggle="collapse" href={modal_call}>
+                    <FontAwesomeIcon icon="fa-solid fa-plus" /> Add Checklist
+                </a>
+                {/* Add check */}
+                <span className="collapse" id={modal_key}>
+                    <a className='box-add-tag px-2 py-1 rounded'>
+                        <input className='input-tag' type='text' onChange={(e) => setCheckDetail([check, e.target.value, id_task])} onBlur={newCheck} ></input>
+                    </a>
+                </span>
+            </span>);
         } else {
             //Converter
             let result = check.replace(/'/g, '"');
@@ -319,8 +364,8 @@ const Detail = (props) => {
                 <div className='accordion ps-3' id={accrd_key}>
                     {
                     data_check_d.map((val, index) => {
-                        const clps_key = "clpsCheck_" + id_task + "_" + val.id;
-                        const clps_call = "#clpsCheck_"+ id_task + "_" + val.id;
+                        const clps_key = "clpsCheck_" + id_task + "_" + index;
+                        const clps_call = "#clpsCheck_"+ id_task + "_" + index;
                         return (
                             <div className='row mt-1'>
                                 <div className='col-1'>
@@ -351,6 +396,17 @@ const Detail = (props) => {
                         );
                     })
                     }
+                    <div className='mt-2'>
+                        <a className='btn-add-tag px-2 py-1 rounded' data-bs-toggle="collapse" href={modal_call}>
+                            <FontAwesomeIcon icon="fa-solid fa-plus" /> Add Checklist
+                        </a>
+                        {/* Add tag */}
+                        <span className="collapse" id={modal_key}>
+                            <a className='box-add-tag px-2 py-1 rounded'>
+                                <input className='input-tag w-50' type='text' onChange={(e) => setCheckDetail([check, e.target.value, id_task])} onBlur={newCheck} ></input>
+                            </a>
+                        </span>
+                    </div>
                 </div>
             );
         }
@@ -392,7 +448,6 @@ const Detail = (props) => {
                                             <div className='card mb-2 p-2'>
                                                 <h6>Checklist</h6>
                                                 {getCheckDetail(val.task_check, val.id)}
-                                                {getMsgNull(val.task_check)}
                                             </div>
                                             <div className='card mb-2 p-2'>
                                                 <h6>Due Date</h6>
