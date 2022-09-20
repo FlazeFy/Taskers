@@ -18,6 +18,7 @@ const Detail = (props) => {
     const [id_check, setIdCheck] = useState(""); //for task check
     const [check_detail, setCheckDetail] = useState(""); //for task check detail
     const [tag_detail, setTagDetail] = useState(""); //for task tag detail
+    const [tag, setTag] = useState(""); //for new task tag
 
     //Update task description
     const editDesc = async (e) => {
@@ -75,6 +76,37 @@ const Detail = (props) => {
         }
         
         //console.log(id_tag_remove);
+
+        try {
+            await Axios.put("http://localhost:9000/deleteTag", {
+                tag_old,
+                id_task
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
+
+    //New tag
+    async function newTag (e) {
+        e.preventDefault();
+
+        var id_task = tag[2]; 
+
+        if(tag[0] != null){
+            //Make valid json
+            let tag_full = tag[0].replace(/'/g, '"');
+            var data_tag = JSON.parse(tag_full);  
+            
+            //Make new json[] value
+            var new_tag = {tag: tag[1]};
+            data_tag[data_tag.length] = new_tag;
+            var tag_old = data_tag;   
+        } else {
+            var tag_old = [{tag: tag[1]}];
+        }       
+
+        //console.log(tag_old);
 
         try {
             await Axios.put("http://localhost:9000/deleteTag", {
@@ -186,8 +218,22 @@ const Detail = (props) => {
 
     //Get task tag
     function getHashtag(tag, id_task){
+        const modal_key = "modal_tag_" + id_task;
+        const modal_call = "#modal_tag_"+ id_task;
+
         if(tag == null){
-            return null;
+            return (
+            <span>
+                <a className='btn-add-tag px-2 py-1 rounded' data-bs-toggle="collapse" href={modal_call}>
+                    <FontAwesomeIcon icon="fa-solid fa-plus" /> Add Tag
+                </a>
+                {/* Add tag */}
+                <span className="collapse" id={modal_key}>
+                    <a className='box-add-tag px-2 py-1 rounded'>
+                        <input className='input-tag' type='text' placeholder='#' onChange={(e) => setTag([tag, e.target.value, id_task])} onBlur={newTag} ></input>
+                    </a>
+                </span>
+            </span>);
         } else {
             //Converter
             const data_tag = JSON.parse(tag);
@@ -211,9 +257,15 @@ const Detail = (props) => {
                         );
                     })
                     }
-                    <a className='btn-add-tag px-2 py-1 rounded'>
+                    <a className='btn-add-tag px-2 py-1 rounded' data-bs-toggle="collapse" href={modal_call}>
                         <FontAwesomeIcon icon="fa-solid fa-plus" /> Add Tag
                     </a>
+                    {/* Add tag */}
+                    <span className="collapse" id={modal_key}>
+                        <a className='box-add-tag px-2 py-1 rounded'>
+                            <input className='input-tag' type='text' placeholder='#' onChange={(e) => setTag([tag, e.target.value, id_task])} onBlur={newTag} ></input>
+                        </a>
+                    </span>
                 </span>
             )
         }
@@ -318,7 +370,7 @@ const Detail = (props) => {
                             <div className='modal-content border-0'>
                                 <div className='modal-body position-relative px-3 py-4'>
                                     <button type='button' className='btn-close position-absolute' data-bs-dismiss='modal' aria-label='Close'></button>
-                                    {/* Edit description */}
+                                    {/* Edit title */}
                                     <input className='form-control-custom-title my-3' id='exampleModalLabel' defaultValue={val.task_title} onChange={(e) => setId(val.id)} onBlur={editTitle}></input>
                                     <div className='row'>
                                         <div className='col-lg-6 col-md-12 col-sm-12'>
@@ -334,7 +386,6 @@ const Detail = (props) => {
                                             <div className='card mb-2 p-2'>
                                                 <h6>Tags</h6>
                                                 {getHashtag(val.task_tag, val.id)}
-                                                {getMsgNull(val.task_tag)}
                                             </div>
                                         </div>
                                         <div className='col-lg-6 col-md-12 col-sm-12'>

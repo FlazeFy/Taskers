@@ -115,7 +115,7 @@ router.put('/updateDueDate', (req, res) => {
     })
 })
 
-//Delete task tag
+//Delete & add task tag
 router.put('/deleteTag', (req, res) => {
     //Tag empty validator
     var tag = null;

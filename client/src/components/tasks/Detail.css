@@ -46,3 +46,11 @@
 .timepicker{
     width: 30%;
 }
+.input-tag{
+    text-decoration: none;
+    width: 100px;
+    border: none;
+    border-bottom: 2px solid rgb(157, 157, 157);
+    border-radius: 6px;
+    background: #f0f1f5;
+}
