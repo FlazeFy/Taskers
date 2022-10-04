@@ -24,8 +24,19 @@ router.post('/insertTask/:id', (req, res) => {
     const title = req.body.title
     const desc = req.body.desc
     const prize = req.body.prize
-    const check = req.body.check
-    const tag = req.body.tag
+    
+    //Check empty validator
+    var check = null;
+    if(req.body.check != null){
+        check = JSON.stringify(req.body.check)
+    }
+
+    //Tag empty validator
+    var tag = null;
+    if(req.body.tag != null){
+        tag = JSON.stringify(req.body.tag)
+    }
+
     const created_at = new Date()
     const updated_at = new Date()
 
