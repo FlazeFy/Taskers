@@ -59,6 +59,27 @@ router.post('/insertTask/:id', (req, res) => {
     })
 })
 
+//Add comment
+router.post('/insertComment/:id', (req, res) => {
+    const id = req.params.id; //user id
+    const id_task = req.body.id_task
+    const comment = req.body.comment
+
+    const created_at = new Date()
+    const updated_at = new Date()
+
+    connection.query("INSERT INTO " +
+        "comment (id, id_user, id_task, comment, created_at, updated_at) " +
+        "VALUES (?, ?, ?, ?, ?, ?)", 
+        [null, id, id_task, comment, created_at, updated_at], (error, rows, fields) => {
+        if (error) {
+            res.status(400).json({ msg: "Error :" + error })
+        } else {
+            res.status(200).json({ msg: "Insert Comment Success",status:200, data: rows })
+        }
+    })
+})
+
 //Update task description
 router.put('/updateDesc', (req, res) => {
     const desc = req.body.desc

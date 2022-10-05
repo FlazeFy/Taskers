@@ -52,6 +52,25 @@ input.edit{
   border-radius: 6px;
   padding: 8px;
 }
+.form-control-custom-comment{
+  border: none;
+  margin-inline: auto;
+  display: block;
+  text-align: left;
+  padding: 10px;
+  width: 100%;
+  border-radius: 6px;
+}
+.form-control-custom-comment:focus{
+  outline: none;
+  background: #f0f1f5 !important;
+}
 textarea {
   height: 100px !important;
+}
+.btn-icon{
+  color: #808080 !important;
+}
+.btn-icon:hover{
+  background: #f0f1f5 !important;
 }

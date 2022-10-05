@@ -3,17 +3,18 @@ import './Detail.css';
 //Font awesome icon
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faRightFromBracket, faBars, faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
 import Axios from "axios";
 
-library.add( faPlus, faRightFromBracket, faBars, faArrowsRotate );
+library.add( faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip );
 
 const Detail = (props) => {
     const [tasks, setTaskList] = useState([]);
     const id_key = 1; //user id for now
     const [desc, setDesc] = useState("");
     const [prize, setPrize] = useState("");
+    const [comment, setComment] = useState("");
     // const [task_check, setCheck] = useState("");
     const [id, setId] = useState(""); //for task id
     const [id_check, setIdCheck] = useState(""); //for task check
@@ -200,6 +201,21 @@ const Detail = (props) => {
             await Axios.put("http://localhost:9000/updateTitle", {
                 title,
                 id
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
+
+    //Comment task
+    const sendComment = async (e) => {
+        var id_task = id;
+        
+        e.preventDefault();
+        try {
+            await Axios.post("http://localhost:9000/insertComment/1", {
+                id_task,
+                comment
             });
         } catch (error) {
             console.log(error.response);
@@ -479,11 +495,9 @@ const Detail = (props) => {
                                                 <h6>Prize</h6>
                                                 {/* Edit prize */}
                                                 <form onSubmit={editPrize}>
-                                                    <div className='card mb-2 p-2'>
-                                                        <input type="text" className="form-check-edit edit" id="floatingInput"
-                                                            defaultValue={val.task_prize} onChange={(e) => setPrize(e.target.value)}></input>
-                                                        <button type='submit' onClick={(e) => setId(val.id)} className='btn btn-success py-1 mt-1 w-25' title='Save Check'>Save</button>
-                                                    </div>
+                                                    <input type="text" className="form-check-edit edit me-2" id="floatingInput"
+                                                        defaultValue={val.task_prize} onChange={(e) => setPrize(e.target.value)}></input>
+                                                    <button type='submit' onClick={(e) => setId(val.id)} className='btn btn-success py-1 mt-1 w-25' title='Save Check'>Save</button>
                                                 </form>
                                             </div>
                                             <div className='card mb-2 p-2'>
@@ -501,10 +515,37 @@ const Detail = (props) => {
                                         </div>
                                     </div>
                                     <h6 className='position-absolute tasks-date'><FontAwesomeIcon icon="fa-regular fa-clock"/>{dateConverter(val.created_at)}</h6>
-                                    {/* Delete task */}
-                                    <form onSubmit={deleteTask} className="">
-                                        <button className='btn btn-danger py-1 mt-1 float-end' onClick={(e) => setId(val.id)} >Delete</button>
-                                    </form>
+                                    <hr></hr><div className='row'>
+                                        <div className='col-lg-9 col-md-8 col-sm-8'>
+                                            {/* Task comment */}
+                                            <div className='mb-2 p-2'>
+                                                <h6>Comment</h6> 
+                                                <div className='card add-comment-box p-2'>
+                                                    <form onSubmit={sendComment} className="">
+                                                        <input value={comment} className="form-control-custom-comment" placeholder="Write a comment..." onChange={(e) => setComment(e.target.value)} required></input>
+                                                        <div className="position-relative">
+                                                            <button className="btn btn-success py-1 mt-1" onClick={(e) => setId(val.id)} type='submit'>Send</button>
+                                                            <button className="btn btn-icon py-1 mt-1 float-end"><FontAwesomeIcon icon="fa-solid fa-paperclip"/></button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className='col-lg-3 col-md-4 col-sm-4'>
+                                            {/* Delete task */}
+                                            <form onSubmit={deleteTask} className="">
+                                                <button className='btn btn-danger py-1 mt-1 w-100' onClick={(e) => setId(val.id)} >Delete</button>
+                                            </form>
+                                            {/* Finished task */}
+                                            <form className="">
+                                                <button className='btn btn-success py-1 mt-1 w-100' onClick={(e) => setId(val.id)} >Finish</button>
+                                            </form>
+                                            {/* Add to archieve */}
+                                            <form className="">
+                                                <button className='btn btn-success py-1 mt-1 w-100' onClick={(e) => setId(val.id)} >Add to Archieve</button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
