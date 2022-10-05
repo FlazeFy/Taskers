@@ -9,7 +9,18 @@ router.get('/', (req, res) => {
 
 //Get all assigned tasks
 router.get('/getAllTask', (req, res) => {
-    connection.query('SELECT * FROM task ORDER BY created_at DESC', (error, rows, fields) => {
+    connection.query('SELECT task.id, task.id_user, task_assigne, task_title, task_desc, task_url, task_check, task_prize, task_tag, due_date, task.created_at, task.updated_at,  CASE WHEN comment.id_task = task.id THEN count(1) ELSE 0 END AS total_comment FROM task left JOIN comment on task.id = comment.id_task GROUP by task.id', (error, rows, fields) => {
+        if (error) {
+            res.status(500).send(error)
+        } else {
+            res.status(200).json({ msg: rows.length + " Data retrived", status: 200, data: rows })
+        }
+    })
+})
+
+//Get all comment
+router.get('/getAllComment', (req, res) => {
+    connection.query('SELECT * FROM comment order by created_at', (error, rows, fields) => {
         if (error) {
             res.status(500).send(error)
         } else {

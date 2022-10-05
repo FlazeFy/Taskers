@@ -3,14 +3,15 @@ import './Detail.css';
 //Font awesome icon
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip, faEdit, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
 import Axios from "axios";
 
-library.add( faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip );
+library.add( faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip, faEdit, faTrashCan );
 
 const Detail = (props) => {
     const [tasks, setTaskList] = useState([]);
+    const [comments, setCommentList] = useState([]);
     const id_key = 1; //user id for now
     const [desc, setDesc] = useState("");
     const [prize, setPrize] = useState("");
@@ -279,6 +280,7 @@ const Detail = (props) => {
 
     useEffect(() => {
         getAllTask();
+        getAllComment();
     }, []);
 
     //Fetch data.
@@ -286,6 +288,11 @@ const Detail = (props) => {
         const response = await Axios.get("http://localhost:9000/getAllTask");
         setTaskList(response.data.data);
     };
+    const getAllComment = async () => {
+        const response = await Axios.get("http://localhost:9000/getAllComment");
+        setCommentList(response.data.data);
+    };
+
     //Converter
     const data = Object.values(tasks);
 
@@ -454,6 +461,54 @@ const Detail = (props) => {
         }
     }
 
+    //Get comment
+    function getComment(id, total){
+        if(total == 0){
+            return null;
+        } else {
+
+            const accrd_key = "accrd_comment_" + id;
+            const accrd_call = "#accrd_comment_"+ id;
+
+            return (
+            <div>
+                <h6 className='total-comment my-1'>Show {total} comment</h6>
+                {
+                    comments.map((val, index) => {
+                        const clps_key = "clpsComment_" + val.id + "_" + index;
+                        const clps_call = "#clpsComment_"+ val.id + "_" + index;
+
+                        //Get username
+                        //user id = 1 for now.
+                        var username = "You";
+                        if(val.id_user != 1){
+                            username = val.id_user;
+                        }
+
+                        if(val.id_task == id){
+                            return (
+                                <div className="comment-box p-2" role="button" data-bs-toggle="collapse" data-bs-target={clps_call}>
+                                    <div className='row'>
+                                        <div className='col-1'>
+                                            <img src='https://i0.wp.com/tropicsofmeta.com/wp-content/uploads/2018/08/hitler-eyes-covered.png?fit=824%2C1084&ssl=1' className='profile-image-sm'></img>
+                                        </div>
+                                        <div className='col-11'>
+                                            <h6 className='username'>{username} <span className='comment-date text-secondary'>... minutes ago</span></h6>
+                                            <a>{val.comment}</a>
+                                            <div className="position-relative collapse" id={clps_key} data-bs-parent={accrd_call}>
+                                                <button className="btn btn-icon-comment float-end" title='Delete'><FontAwesomeIcon icon="fa-solid fa-trash-can"/></button>
+                                                <a className="btn btn-icon-comment float-end" title='Edit'><FontAwesomeIcon icon="fa-solid fa-edit"/></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        }
+                    })
+                }
+            </div>);
+        }
+    }
 
     return (
         <div>
@@ -525,10 +580,11 @@ const Detail = (props) => {
                                                         <input value={comment} className="form-control-custom-comment" placeholder="Write a comment..." onChange={(e) => setComment(e.target.value)} required></input>
                                                         <div className="position-relative">
                                                             <button className="btn btn-success py-1 mt-1" onClick={(e) => setId(val.id)} type='submit'>Send</button>
-                                                            <button className="btn btn-icon py-1 mt-1 float-end"><FontAwesomeIcon icon="fa-solid fa-paperclip"/></button>
+                                                            <button className="btn btn-icon py-1 mt-1 float-end" title='Attach a File'><FontAwesomeIcon icon="fa-solid fa-paperclip"/></button>
                                                         </div>
                                                     </form>
                                                 </div>
+                                                {getComment(val.id, val.total_comment)}
                                             </div>
                                         </div>
                                         <div className='col-lg-3 col-md-4 col-sm-4'>

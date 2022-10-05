@@ -8,13 +8,14 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquareCheck, faClock, faUser } from "@fortawesome/free-regular-svg-icons";
 import { faGift, faHashtag, faAngleDown, faXmark, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faMessage } from "@fortawesome/free-regular-svg-icons";
 
 import { useState, useEffect } from "react";
 import Axios from "axios";
 import Isotope from "isotope-layout";
 import matchesSelector from 'desandro-matches-selector';
 
-library.add( faSquareCheck, faClock, faUser, faGift, faHashtag, faAngleDown, faXmark, faTrash );
+library.add( faSquareCheck, faClock, faUser, faGift, faHashtag, faAngleDown, faXmark, faTrash, faMessage );
 
 const Assigned = (props) => {
     //Isotope layout
@@ -132,6 +133,19 @@ const Assigned = (props) => {
         }
     }
 
+    //Get comment icon
+    function getComment(total){
+        if(total == 0){
+            return null;
+        } else {
+            return (
+                <a className='btn-detail tasks-icon-box text-check'>
+                    <FontAwesomeIcon icon="fa-regular fa-message" size='md' /> {total} 
+                </a>
+            );
+        }
+    }
+
     //Get task tag
     function getHashtag(tag){
         if(tag == null){
@@ -199,6 +213,7 @@ const Assigned = (props) => {
                                             {getCheck(val.task_check)}
                                             {getTaskPrize(val.task_prize)}
                                             {getHashtag(val.task_tag)}
+                                            {getComment(val.total_comment)}
                                             {getDueDate(val.due_date)}
                                         </button>
                                     </div>
