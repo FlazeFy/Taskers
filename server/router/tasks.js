@@ -23,8 +23,7 @@ router.post('/insertTask/:id', (req, res) => {
     const id = req.params.id;
     const title = req.body.title
     const desc = req.body.desc
-    const prize = req.body.prize
-    
+
     //Check empty validator
     var check = null;
     if(req.body.check != null){
@@ -36,6 +35,12 @@ router.post('/insertTask/:id', (req, res) => {
     if(req.body.tag != null){
         tag = JSON.stringify(req.body.tag)
     }
+
+    //Prize empty validator
+    var prize = null;
+    if ((req.body.prize != null)||(req.body.prize != "")){
+        prize = req.body.prize
+    } 
 
     const created_at = new Date()
     const updated_at = new Date()
@@ -64,6 +69,24 @@ router.put('/updateDesc', (req, res) => {
         "task SET task_desc = ?, updated_at = ? " +
         "WHERE id = ? ",
         [desc, updated_at, id], (error, rows, fields) => {
+        if (error) {
+            res.status(400).json({ msg: "Error :" + error })
+        } else {
+            res.status(200).json({ msg: "Update Success",status:200, data: rows })
+        }
+    })
+})
+
+//Update task prize
+router.put('/updatePrize', (req, res) => {
+    const prize = req.body.prize
+    const id = req.body.id
+    const updated_at = new Date()
+
+    connection.query("UPDATE " +
+        "task SET task_prize = ?, updated_at = ? " +
+        "WHERE id = ? ",
+        [prize, updated_at, id], (error, rows, fields) => {
         if (error) {
             res.status(400).json({ msg: "Error :" + error })
         } else {
@@ -145,6 +168,21 @@ router.put('/deleteTag', (req, res) => {
             res.status(400).json({ msg: "Error :" + error })
         } else {
             res.status(200).json({ msg: "Update Success",status:200, data: rows })
+        }
+    })
+})
+
+//Delete task
+router.put('/deleteTask', (req, res) => {
+    const id = req.body.id
+
+    connection.query("DELETE FROM " +
+        "task WHERE id = ? ",
+        [id], (error, rows, fields) => {
+        if (error) {
+            res.status(400).json({ msg: "Error :" + error })
+        } else {
+            res.status(200).json({ msg: "Delete Success",status:200, data: rows })
         }
     })
 })

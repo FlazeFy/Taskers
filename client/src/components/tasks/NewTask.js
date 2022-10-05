@@ -38,6 +38,7 @@ const NewTask = () => {
     const handleCheckChange = (e, index) => {
         const { detail, value } = e.target;
         const list = [...checklist];
+        list[index].id = index + 1;
         list[index].detail = value;
         setChecklist(list);
     };
@@ -117,7 +118,7 @@ const NewTask = () => {
                                 <div className='row' key={index}>
                                     <div className='col-10'>
                                         <div className="form-floating mb-2">
-                                            <input type="text" className="form-control px-3" id="floatingInput"
+                                            <input type="text" className="form-control px-3" id="floatingInput" required
                                                 onChange={(e) => handleCheckChange(e, index)}></input>
                                             <label className='px-3'><b>#{index+1}</b> Checklist Name</label>
                                         </div>
@@ -137,7 +138,7 @@ const NewTask = () => {
                                 <div className='row' key={index}>
                                     <div className='col-10'>
                                         <div className="form-floating mb-2 position-relative">
-                                            <input type="text" className="form-control px-4" id="floatingInput"
+                                            <input type="text" className="form-control px-4" id="floatingInput" required
                                                 onChange={(e) => handleTagChange(e, index)}></input>
                                             <label className='px-3'>Tag Name</label>
                                             <span className='px-3 position-absolute tags-icon'>#</span>

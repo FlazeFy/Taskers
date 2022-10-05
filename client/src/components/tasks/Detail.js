@@ -13,6 +13,7 @@ const Detail = (props) => {
     const [tasks, setTaskList] = useState([]);
     const id_key = 1; //user id for now
     const [desc, setDesc] = useState("");
+    const [prize, setPrize] = useState("");
     // const [task_check, setCheck] = useState("");
     const [id, setId] = useState(""); //for task id
     const [id_check, setIdCheck] = useState(""); //for task check
@@ -26,6 +27,19 @@ const Detail = (props) => {
         try {
             await Axios.put("http://localhost:9000/updateDesc", {
                 desc,
+                id
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
+
+    //Update task prize
+    const editPrize = async (e) => {
+        e.preventDefault();
+        try {
+            await Axios.put("http://localhost:9000/updatePrize", {
+                prize,
                 id
             });
         } catch (error) {
@@ -193,6 +207,7 @@ const Detail = (props) => {
     };
 
     //Update task due date
+    //Bugg... cant update date and time at the same moment. one of these will set as default
     async function editDueDate (e) {
         const due_date_old = new Date(id[1]);
         const type = id[2]; // Type of due date change. "date" and "time"
@@ -217,6 +232,17 @@ const Detail = (props) => {
             console.log(error.response);
         }
     };
+
+    //Delete task
+    async function deleteTask(e){
+        try {
+            await Axios.put("http://localhost:9000/deleteTask", {
+                id
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    }
 
     //Update task due date (set null)
     async function deleteDueDate (e) {
@@ -450,6 +476,17 @@ const Detail = (props) => {
                                                 {getCheckDetail(val.task_check, val.id)}
                                             </div>
                                             <div className='card mb-2 p-2'>
+                                                <h6>Prize</h6>
+                                                {/* Edit prize */}
+                                                <form onSubmit={editPrize}>
+                                                    <div className='card mb-2 p-2'>
+                                                        <input type="text" className="form-check-edit edit" id="floatingInput"
+                                                            defaultValue={val.task_prize} onChange={(e) => setPrize(e.target.value)}></input>
+                                                        <button type='submit' onClick={(e) => setId(val.id)} className='btn btn-success py-1 mt-1 w-25' title='Save Check'>Save</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div className='card mb-2 p-2'>
                                                 <h6>Due Date</h6>
                                                 <div className='row'>
                                                     {/* Delete due date */}
@@ -464,6 +501,10 @@ const Detail = (props) => {
                                         </div>
                                     </div>
                                     <h6 className='position-absolute tasks-date'><FontAwesomeIcon icon="fa-regular fa-clock"/>{dateConverter(val.created_at)}</h6>
+                                    {/* Delete task */}
+                                    <form onSubmit={deleteTask} className="">
+                                        <button className='btn btn-danger py-1 mt-1 float-end' onClick={(e) => setId(val.id)} >Delete</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

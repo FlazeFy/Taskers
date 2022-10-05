@@ -84,10 +84,10 @@ const Assigned = (props) => {
 
     //Get task prize
     function getTaskPrize(prize){
-        if(prize != null){
-           return (
+        if((prize != null)&&(prize != "")){
+            return (
                 <a className='btn-detail tasks-icon-box text-gift'>
-                    <FontAwesomeIcon icon="fa-solid fa-gift" size='lg' /> Rp. 20K
+                    <FontAwesomeIcon icon="fa-solid fa-gift" size='lg' /> {prize}
                 </a>
            );
         }
@@ -116,7 +116,7 @@ const Assigned = (props) => {
 
     //Get task check
     function getCheck(check){
-        if(check == null){
+        if((check == null )||(check == "[]")){
             return null;
         } else {
             //Converter
