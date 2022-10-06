@@ -239,6 +239,21 @@ router.put('/deleteTask', (req, res) => {
     })
 })
 
+//Delete comment
+router.put('/deleteComment', (req, res) => {
+    const id = req.body.id_comment
+
+    connection.query("DELETE FROM " +
+        "comment WHERE id = ? ",
+        [id], (error, rows, fields) => {
+        if (error) {
+            res.status(400).json({ msg: "Error :" + error })
+        } else {
+            res.status(200).json({ msg: "Delete Success",status:200, data: rows })
+        }
+    })
+})
+
 //Delete task check
 router.put('/deleteCheck', (req, res) => {
     //Check empty validator

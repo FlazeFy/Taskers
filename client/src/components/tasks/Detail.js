@@ -276,6 +276,19 @@ const Detail = (props) => {
         }
     }
 
+    //Delete comment.
+    async function deleteComment(e){
+        e.preventDefault();
+
+        try {
+            await Axios.put("http://localhost:9000/deleteComment", {
+                id_comment
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    }
+
     //Update task due date (set null)
     async function deleteDueDate (e) {
         const due_date = null;
@@ -492,27 +505,32 @@ const Detail = (props) => {
             <div className="position-relative" >
                 <div className='mt-1 accordion' id={accrd_key}>
                     <div className='collapse' id={clps_del_key} data-bs-parent={accrd_call}>
-                        ...
+                        {/* Delete comment */}
+                        <form onSubmit={deleteComment}>
+                            <button type='submit' onClick={(e) => setIdComment(id_comment)} className='btn btn-danger py-1 mt-2 w-25'>Delete</button>
+                        </form>
                     </div>
                     <div className='collapse' id={clps_edit_key} data-bs-parent={accrd_call}>
                         {/* Edit comment */}
                         <form onSubmit={editComment}>
                             <textarea type="text" className="form-control edit" id="floatingInput"
                                 defaultValue={comment} onChange={(e) => setComment(e.target.value)}></textarea>
-                            <button type='submit' onClick={(e) => setIdComment(id_comment)} className='btn btn-success py-1 mt-2 w-25' title='Save Check'>Save</button>
+                            <button type='submit' onClick={(e) => setIdComment(id_comment)} className='btn btn-success py-1 mt-2 w-25'>Save</button>
                         </form>
                     </div>
                 </div>
                 <div className='config-box'>
                     <a className="btn btn-icon-comment float-end" title='Delete' data-bs-toggle="collapse" data-bs-target={clps_del_call}><FontAwesomeIcon icon="fa-solid fa-trash-can"/></a>
                     <a className="btn btn-icon-comment float-end" title='Edit' data-bs-toggle="collapse" href={clps_edit_call}><FontAwesomeIcon icon="fa-solid fa-edit"/></a>
-                    <a className="btn btn-icon-comment float-end" title='Copy'><FontAwesomeIcon icon="fa-regular fa-copy"/></a>
+                    <a className="btn btn-icon-comment float-end" title='Copy' onClick={() => {navigator.clipboard.writeText(comment)}}>
+                        <FontAwesomeIcon icon="fa-regular fa-copy"/></a>
                 </div>
             </div>);
         } else {
             return (
             <div className="position-relative"> {/*id={clps_key} data-bs-parent={accrd_call}*/}
-                <a className="btn btn-icon-comment float-end" title='Copy'><FontAwesomeIcon icon="fa-regular fa-copy"/></a>
+                <a className="btn btn-icon-comment float-end" title='Copy' onClick={() => {navigator.clipboard.writeText(comment)}}>
+                    <FontAwesomeIcon icon="fa-regular fa-copy"/></a>
             </div>);
         }
     }
