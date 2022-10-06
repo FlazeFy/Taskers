@@ -140,7 +140,7 @@ const Assigned = (props) => {
         } else {
             return (
                 <a className='btn-detail tasks-icon-box text-check'>
-                    <FontAwesomeIcon icon="fa-regular fa-message" size='md' /> {total} 
+                    <FontAwesomeIcon icon="fa-regular fa-message" /> {total} 
                 </a>
             );
         }

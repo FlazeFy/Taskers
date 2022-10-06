@@ -4,10 +4,11 @@ import './Detail.css';
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip, faEdit, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faCopy } from "@fortawesome/free-regular-svg-icons";
 import { useState, useEffect, useRef } from "react";
 import Axios from "axios";
 
-library.add( faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip, faEdit, faTrashCan );
+library.add( faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip, faEdit, faTrashCan, faCopy );
 
 const Detail = (props) => {
     const [tasks, setTaskList] = useState([]);
@@ -18,6 +19,7 @@ const Detail = (props) => {
     const [comment, setComment] = useState("");
     // const [task_check, setCheck] = useState("");
     const [id, setId] = useState(""); //for task id
+    const [id_comment, setIdComment] = useState(""); 
     const [id_check, setIdCheck] = useState(""); //for task check
     const [check_detail, setCheckDetail] = useState(""); //for task check detail
     const [tag_detail, setTagDetail] = useState(""); //for task tag detail
@@ -261,6 +263,19 @@ const Detail = (props) => {
         }
     }
 
+    //Edit comment.
+    async function editComment(e){
+        e.preventDefault();
+
+        try {
+            await Axios.put("http://localhost:9000/editComment/" + id_comment, {
+                comment
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    }
+
     //Update task due date (set null)
     async function deleteDueDate (e) {
         const due_date = null;
@@ -461,15 +476,52 @@ const Detail = (props) => {
         }
     }
 
+    function getCommentSet(id, id_comment, comment){
+        const id_user = 1;
+
+        if(id == id_user){
+            const accrd_key = "accrd_comment_" + id_comment;
+            const accrd_call = "#accrd_comment_"+ id_comment;
+            
+            const clps_del_key = "clps_del_comment_" + id_comment;
+            const clps_del_call = "#clps_del_comment_"+ id_comment;
+            const clps_edit_key = "clps_edit_comment_" + id_comment;
+            const clps_edit_call = "#clps_edit_comment_"+ id_comment;
+
+            return (
+            <div className="position-relative" >
+                <div className='mt-1 accordion' id={accrd_key}>
+                    <div className='collapse' id={clps_del_key} data-bs-parent={accrd_call}>
+                        ...
+                    </div>
+                    <div className='collapse' id={clps_edit_key} data-bs-parent={accrd_call}>
+                        {/* Edit comment */}
+                        <form onSubmit={editComment}>
+                            <textarea type="text" className="form-control edit" id="floatingInput"
+                                defaultValue={comment} onChange={(e) => setComment(e.target.value)}></textarea>
+                            <button type='submit' onClick={(e) => setIdComment(id_comment)} className='btn btn-success py-1 mt-2 w-25' title='Save Check'>Save</button>
+                        </form>
+                    </div>
+                </div>
+                <div className='config-box'>
+                    <a className="btn btn-icon-comment float-end" title='Delete' data-bs-toggle="collapse" data-bs-target={clps_del_call}><FontAwesomeIcon icon="fa-solid fa-trash-can"/></a>
+                    <a className="btn btn-icon-comment float-end" title='Edit' data-bs-toggle="collapse" href={clps_edit_call}><FontAwesomeIcon icon="fa-solid fa-edit"/></a>
+                    <a className="btn btn-icon-comment float-end" title='Copy'><FontAwesomeIcon icon="fa-regular fa-copy"/></a>
+                </div>
+            </div>);
+        } else {
+            return (
+            <div className="position-relative"> {/*id={clps_key} data-bs-parent={accrd_call}*/}
+                <a className="btn btn-icon-comment float-end" title='Copy'><FontAwesomeIcon icon="fa-regular fa-copy"/></a>
+            </div>);
+        }
+    }
+
     //Get comment
     function getComment(id, total){
         if(total == 0){
             return null;
         } else {
-
-            const accrd_key = "accrd_comment_" + id;
-            const accrd_call = "#accrd_comment_"+ id;
-
             return (
             <div>
                 <h6 className='total-comment my-1'>Show {total} comment</h6>
@@ -487,7 +539,7 @@ const Detail = (props) => {
 
                         if(val.id_task == id){
                             return (
-                                <div className="comment-box p-2" role="button" data-bs-toggle="collapse" data-bs-target={clps_call}>
+                                <div className="comment-box p-2" role="button" > {/*data-bs-toggle="collapse" data-bs-target={clps_call}*/}
                                     <div className='row'>
                                         <div className='col-1'>
                                             <img src='https://i0.wp.com/tropicsofmeta.com/wp-content/uploads/2018/08/hitler-eyes-covered.png?fit=824%2C1084&ssl=1' className='profile-image-sm'></img>
@@ -495,10 +547,8 @@ const Detail = (props) => {
                                         <div className='col-11'>
                                             <h6 className='username'>{username} <span className='comment-date text-secondary'>... minutes ago</span></h6>
                                             <a>{val.comment}</a>
-                                            <div className="position-relative collapse" id={clps_key} data-bs-parent={accrd_call}>
-                                                <button className="btn btn-icon-comment float-end" title='Delete'><FontAwesomeIcon icon="fa-solid fa-trash-can"/></button>
-                                                <a className="btn btn-icon-comment float-end" title='Edit'><FontAwesomeIcon icon="fa-solid fa-edit"/></a>
-                                            </div>
+                                            {/*Comment setting*/}
+                                            {getCommentSet(val.id_user, val.id, val.comment)}
                                         </div>
                                     </div>
                                 </div>

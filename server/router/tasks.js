@@ -109,6 +109,26 @@ router.put('/updateDesc', (req, res) => {
     })
 })
 
+//Edit comment
+router.put('/editComment/:id', (req, res) => {
+    const id = req.params.id; //id_comment
+    const comment = req.body.comment
+
+    const updated_at = new Date()
+
+    connection.query("UPDATE " +
+        "comment SET comment = ?, updated_at = ? " +
+        "WHERE id = ? ",
+        [comment, updated_at, id], (error, rows, fields) => {
+        if (error) {
+            res.status(400).json({ msg: "Error :" + error })
+        } else {
+            res.status(200).json({ msg: "Update Success",status:200, data: rows })
+        }
+    })
+})
+
+
 //Update task prize
 router.put('/updatePrize', (req, res) => {
     const prize = req.body.prize
