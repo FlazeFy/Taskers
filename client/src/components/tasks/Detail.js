@@ -3,12 +3,12 @@ import './Detail.css';
 //Font awesome icon
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip, faEdit, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip, faEdit, faTrashCan, faReply } from "@fortawesome/free-solid-svg-icons";
 import { faCopy } from "@fortawesome/free-regular-svg-icons";
 import { useState, useEffect, useRef } from "react";
 import Axios from "axios";
 
-library.add( faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip, faEdit, faTrashCan, faCopy );
+library.add( faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip, faEdit, faTrashCan, faCopy, faReply );
 
 const Detail = (props) => {
     const [tasks, setTaskList] = useState([]);
@@ -17,6 +17,7 @@ const Detail = (props) => {
     const [desc, setDesc] = useState("");
     const [prize, setPrize] = useState("");
     const [comment, setComment] = useState("");
+    const [reply, setReply] = useState("");
     // const [task_check, setCheck] = useState("");
     const [id, setId] = useState(""); //for task id
     const [id_comment, setIdComment] = useState(""); 
@@ -219,6 +220,19 @@ const Detail = (props) => {
             await Axios.post("http://localhost:9000/insertComment/1", {
                 id_task,
                 comment
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
+
+    //Reply Comment task
+    const sendReply = async (e) => {
+        e.preventDefault();
+        try {
+            await Axios.post("http://localhost:9000/insertReply/1", {
+                id_comment,
+                reply
             });
         } catch (error) {
             console.log(error.response);
@@ -491,6 +505,8 @@ const Detail = (props) => {
 
     function getCommentSet(id, id_comment, comment){
         const id_user = 1;
+        const clps_reply_key = "clps_reply_comment_" + id_comment;
+        const clps_reply_call = "#clps_reply_comment_"+ id_comment;
 
         if(id == id_user){
             const accrd_key = "accrd_comment_" + id_comment;
@@ -518,19 +534,50 @@ const Detail = (props) => {
                             <button type='submit' onClick={(e) => setIdComment(id_comment)} className='btn btn-success py-1 mt-2 w-25'>Save</button>
                         </form>
                     </div>
+                    <div className='collapse' id={clps_reply_key} data-bs-parent={accrd_call}>
+                        {/* Send reply */}
+                        <form onSubmit={sendReply}>
+                            <input className="form-control-custom-comment" placeholder="Write a reply..." onChange={(e) => setReply(e.target.value)} required></input>
+                            <div className="position-relative">
+                                <button className="btn btn-success py-1 mt-1" onClick={(e) => setIdComment(id_comment)} type='submit'>Send</button>
+                                <button className="btn btn-icon py-1 mt-1 float-end" title='Attach a File'><FontAwesomeIcon icon="fa-solid fa-paperclip"/></button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 <div className='config-box'>
-                    <a className="btn btn-icon-comment float-end" title='Delete' data-bs-toggle="collapse" data-bs-target={clps_del_call}><FontAwesomeIcon icon="fa-solid fa-trash-can"/></a>
-                    <a className="btn btn-icon-comment float-end" title='Edit' data-bs-toggle="collapse" href={clps_edit_call}><FontAwesomeIcon icon="fa-solid fa-edit"/></a>
+                    <a className="btn btn-icon-comment float-end" title='Delete' data-bs-toggle="collapse" data-bs-target={clps_del_call}>
+                        <FontAwesomeIcon icon="fa-solid fa-trash-can"/></a>
+                    <a className="btn btn-icon-comment float-end" title='Edit' data-bs-toggle="collapse" href={clps_edit_call}>
+                        <FontAwesomeIcon icon="fa-solid fa-edit"/></a>
                     <a className="btn btn-icon-comment float-end" title='Copy' onClick={() => {navigator.clipboard.writeText(comment)}}>
                         <FontAwesomeIcon icon="fa-regular fa-copy"/></a>
+                    <a className="btn btn-icon-comment float-end" title='Reply' data-bs-toggle="collapse" href={clps_reply_call}>
+                        <FontAwesomeIcon icon="fa-solid fa-reply"/></a>
                 </div>
             </div>);
         } else {
+            const accrd_key = "accrd_comment_" + id_comment;
+            const accrd_call = "#accrd_comment_"+ id_comment;
+
             return (
             <div className="position-relative"> {/*id={clps_key} data-bs-parent={accrd_call}*/}
+                <div className='mt-1 accordion' id={accrd_key}>
+                    <div className='collapse' id={clps_reply_key} data-bs-parent={accrd_call}>
+                        {/* Send reply */}
+                        <form onSubmit={sendReply}>
+                            <input className="form-control-custom-comment" placeholder="Write a reply..." onChange={(e) => setReply(e.target.value)} required></input>
+                            <div className="position-relative">
+                                <button className="btn btn-success py-1 mt-1" onClick={(e) => setIdComment(id_comment)} type='submit'>Send</button>
+                                <button className="btn btn-icon py-1 mt-1 float-end" title='Attach a File'><FontAwesomeIcon icon="fa-solid fa-paperclip"/></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 <a className="btn btn-icon-comment float-end" title='Copy' onClick={() => {navigator.clipboard.writeText(comment)}}>
                     <FontAwesomeIcon icon="fa-regular fa-copy"/></a>
+                <a className="btn btn-icon-comment float-end" title='Reply' data-bs-toggle="collapse" href={clps_reply_call}>
+                    <FontAwesomeIcon icon="fa-solid fa-reply"/></a>
             </div>);
         }
     }
