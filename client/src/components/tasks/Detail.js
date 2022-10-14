@@ -13,6 +13,7 @@ library.add( faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip, fa
 const Detail = (props) => {
     const [tasks, setTaskList] = useState([]);
     const [comments, setCommentList] = useState([]);
+    const [replies, setReplyList] = useState([]);
     const id_key = 1; //user id for now
     const [desc, setDesc] = useState("");
     const [prize, setPrize] = useState("");
@@ -229,9 +230,14 @@ const Detail = (props) => {
     //Reply Comment task
     const sendReply = async (e) => {
         e.preventDefault();
+
+        const task_id = id_comment[0];
+        const comment_id = id_comment[1];
+
         try {
             await Axios.post("http://localhost:9000/insertReply/1", {
-                id_comment,
+                task_id,
+                comment_id,
                 reply
             });
         } catch (error) {
@@ -323,6 +329,7 @@ const Detail = (props) => {
     useEffect(() => {
         getAllTask();
         getAllComment();
+        getAllReply();
     }, []);
 
     //Fetch data.
@@ -333,6 +340,10 @@ const Detail = (props) => {
     const getAllComment = async () => {
         const response = await Axios.get("http://localhost:9000/getAllComment");
         setCommentList(response.data.data);
+    };
+    const getAllReply = async () => {
+        const response = await Axios.get("http://localhost:9000/getAllReply");
+        setReplyList(response.data.data);
     };
 
     //Converter
@@ -535,11 +546,14 @@ const Detail = (props) => {
                         </form>
                     </div>
                     <div className='collapse' id={clps_reply_key} data-bs-parent={accrd_call}>
+                        {/* Show reply */}
+                        {getReply(id_comment)}
+
                         {/* Send reply */}
                         <form onSubmit={sendReply}>
-                            <input className="form-control-custom-comment" placeholder="Write a reply..." onChange={(e) => setReply(e.target.value)} required></input>
+                            <input className="form-control-custom-comment my-2" placeholder="Write a reply..." onChange={(e) => setReply(e.target.value)} required></input>
                             <div className="position-relative">
-                                <button className="btn btn-success py-1 mt-1" onClick={(e) => setIdComment(id_comment)} type='submit'>Send</button>
+                                <button className="btn btn-success py-1 mt-1" onClick={(e) => setIdComment([id, id_comment])} type='submit'>Send</button>
                                 <button className="btn btn-icon py-1 mt-1 float-end" title='Attach a File'><FontAwesomeIcon icon="fa-solid fa-paperclip"/></button>
                             </div>
                         </form>
@@ -564,11 +578,14 @@ const Detail = (props) => {
             <div className="position-relative"> {/*id={clps_key} data-bs-parent={accrd_call}*/}
                 <div className='mt-1 accordion' id={accrd_key}>
                     <div className='collapse' id={clps_reply_key} data-bs-parent={accrd_call}>
+                        {/* Show reply */}
+                        {getReply(id_comment)}
+
                         {/* Send reply */}
                         <form onSubmit={sendReply}>
-                            <input className="form-control-custom-comment" placeholder="Write a reply..." onChange={(e) => setReply(e.target.value)} required></input>
+                            <input className="form-control-custom-comment my-2" placeholder="Write a reply..." onChange={(e) => setReply(e.target.value)} required></input>
                             <div className="position-relative">
-                                <button className="btn btn-success py-1 mt-1" onClick={(e) => setIdComment(id_comment)} type='submit'>Send</button>
+                                <button className="btn btn-success py-1 mt-1" onClick={(e) => setIdComment([id, id_comment])} type='submit'>Send</button>
                                 <button className="btn btn-icon py-1 mt-1 float-end" title='Attach a File'><FontAwesomeIcon icon="fa-solid fa-paperclip"/></button>
                             </div>
                         </form>
@@ -623,6 +640,39 @@ const Detail = (props) => {
                 }
             </div>);
         }
+    }
+
+    function getReply(id){
+        return (
+        <div className='reply-holder'>
+            {
+                replies.map((val, index) => {
+
+                    //Get username
+                    //user id = 1 for now.
+                    var username = "You";
+                    if(val.id_user != 1){
+                        username = val.id_user;
+                    }
+
+                    if(val.id_comment == id){
+                        return (
+                            <div className="reply-item p-2 ps-4" role="button" > {/*data-bs-toggle="collapse" data-bs-target={clps_call}*/}
+                                <div className='row'>
+                                    <div className='col-1'>
+                                        <img src='https://i0.wp.com/tropicsofmeta.com/wp-content/uploads/2018/08/hitler-eyes-covered.png?fit=824%2C1084&ssl=1' className='profile-image-sm'></img>
+                                    </div>
+                                    <div className='col-11'>
+                                        <h6 className='username'>{username} <span className='comment-date text-secondary'>... minutes ago</span></h6>
+                                        <a>{val.reply}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    }
+                })
+            }
+        </div>);
     }
 
     return (
@@ -686,7 +736,7 @@ const Detail = (props) => {
                                     </div>
                                     <h6 className='position-absolute tasks-date'><FontAwesomeIcon icon="fa-regular fa-clock"/>{dateConverter(val.created_at)}</h6>
                                     <hr></hr><div className='row'>
-                                        <div className='col-lg-9 col-md-8 col-sm-8'>
+                                        <div className='col-lg-9 col-md-12 col-sm-12'>
                                             {/* Task comment */}
                                             <div className='mb-2 p-2'>
                                                 <h6>Comment</h6> 
@@ -702,7 +752,7 @@ const Detail = (props) => {
                                                 {getComment(val.id, val.total_comment)}
                                             </div>
                                         </div>
-                                        <div className='col-lg-3 col-md-4 col-sm-4'>
+                                        <div className='col-lg-3 col-md-12 col-sm-12'>
                                             {/* Delete task */}
                                             <form onSubmit={deleteTask} className="">
                                                 <button className='btn btn-danger py-1 mt-1 w-100' onClick={(e) => setId(val.id)} >Delete</button>

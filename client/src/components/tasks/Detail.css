@@ -60,3 +60,31 @@
     font-size: 13px;
     font-style: italic;
 }
+
+.reply-holder .reply-item {
+    padding: 0 0 12px 12px;
+    margin-top: -2px;
+    border-left: 3px solid #2A6FD8;
+    position: relative;
+    margin-left:-25px;
+}
+.reply-holder .reply-item ul {
+    padding-left: 12px;
+}
+.reply-holder .reply-item ul li {
+    padding-bottom: 10px;
+}
+.reply-holder .reply-item:last-child {
+    padding-bottom: 0;
+}
+.reply-holder .reply-item::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50px;
+    left: -10px;
+    top: 30%;
+    background: white;
+    border: 3px solid #2A6FD8;
+}

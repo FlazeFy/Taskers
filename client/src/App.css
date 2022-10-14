@@ -72,10 +72,12 @@ textarea {
   color: #808080 !important;
 }
 .btn-icon:hover{
-  background: #f0f1f5 !important;
+  background: #2A6FD8 !important;
+  color:white !important;
 }
 .btn-icon-comment:hover{
-  background: #dcdde1 !important;
+  background: #2A6FD8 !important;
+  color:white !important;
 }
 .username{
   font-size: 14px;
