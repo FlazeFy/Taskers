@@ -3,12 +3,12 @@ import './Detail.css';
 //Font awesome icon
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip, faEdit, faTrashCan, faReply } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip, faEdit, faTrashCan, faReply, faRepeat, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faCopy } from "@fortawesome/free-regular-svg-icons";
 import { useState, useEffect, useRef } from "react";
 import Axios from "axios";
 
-library.add( faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip, faEdit, faTrashCan, faCopy, faReply );
+library.add( faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip, faEdit, faTrashCan, faCopy, faReply, faRepeat, faCheck );
 
 const Detail = (props) => {
     const [tasks, setTaskList] = useState([]);
@@ -17,6 +17,7 @@ const Detail = (props) => {
     const id_key = 1; //user id for now
     const [desc, setDesc] = useState("");
     const [prize, setPrize] = useState("");
+    const [status, setStatus] = useState("");
     const [comment, setComment] = useState("");
     const [reply, setReply] = useState("");
     // const [task_check, setCheck] = useState("");
@@ -205,6 +206,21 @@ const Detail = (props) => {
         try {
             await Axios.put("http://localhost:9000/updateTitle", {
                 title,
+                id
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
+
+    //Update task status
+    async function editStatus (e) {
+        const task_status = status;
+        
+        e.preventDefault();
+        try {
+            await Axios.put("http://localhost:9000/updateStatus", {
+                task_status,
                 id
             });
         } catch (error) {
@@ -642,6 +658,7 @@ const Detail = (props) => {
         }
     }
 
+    //Get reply
     function getReply(id){
         return (
         <div className='reply-holder'>
@@ -677,6 +694,23 @@ const Detail = (props) => {
                 })
             }
         </div>);
+    }
+
+    //Get finished button
+    function getFinishedButton(id, task_status){
+        if(task_status == "unfinished"){
+            return (
+                <form onSubmit={editStatus}>
+                    <button className='btn btn-success py-1 mt-1 w-100' onClick={(e) => [setId(id), setStatus('finished')]} ><FontAwesomeIcon icon="fa-solid fa-check"/> Finish Task</button>
+                </form>
+            );
+        } else {
+            return (
+                <form onSubmit={editStatus}>
+                    <button className='btn btn-danger py-1 mt-1 w-100' onClick={(e) => [setId(id), setStatus('unfinished')]} ><FontAwesomeIcon icon="fa-solid fa-repeat"/> Unfinished Task</button>
+                </form>
+            );
+        }
     }
 
     return (
@@ -762,9 +796,7 @@ const Detail = (props) => {
                                                 <button className='btn btn-danger py-1 mt-1 w-100' onClick={(e) => setId(val.id)} >Delete</button>
                                             </form>
                                             {/* Finished task */}
-                                            <form className="">
-                                                <button className='btn btn-success py-1 mt-1 w-100' onClick={(e) => setId(val.id)} >Finish</button>
-                                            </form>
+                                            {getFinishedButton(val.id, val.task_status)}
                                             {/* Add to archieve */}
                                             <form className="">
                                                 <button className='btn btn-success py-1 mt-1 w-100' onClick={(e) => setId(val.id)} >Add to Archieve</button>

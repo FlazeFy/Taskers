@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquareCheck, faClock, faUser } from "@fortawesome/free-regular-svg-icons";
 import { faGift, faHashtag, faAngleDown, faXmark, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
+import Draggable from 'react-draggable';
 
 import { useState, useEffect } from "react";
 import Axios from "axios";
@@ -37,6 +38,8 @@ const Assigned = (props) => {
     //Initial variable
     const [tasks, setTaskList] = useState([]);
     const id_key = 1; //user id for now
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+    
 
     useEffect(() => {
         getAllTask();
@@ -51,6 +54,10 @@ const Assigned = (props) => {
     //Converter
     const data = Object.values(tasks);
     //console.log(data);
+
+    const trackPos = (data) => {
+        setPosition({ x: data.x, y: data.y });
+     };
 
     //Date convert
     function dateConverter(datetime){
@@ -201,23 +208,26 @@ const Assigned = (props) => {
                             const modal_call = "#open-task-"+ val.id;
 
                             return ( //Key still error
-                                <div key={i} className='col-lg-6 col-md-6 col-sm-12 content-item filter-mytask'>
-                                    <div className='card border-0 mt-3 rounded shadow p-0 w-100 position-relative'>
-                                        <button className='m-0 p-3 border-0 bg-transparent text-start' data-bs-toggle='modal' data-bs-target={modal_call}>
-                                            <h6 className='position-absolute tasks-date'><FontAwesomeIcon icon="fa-regular fa-clock" />{dateConverter(val.created_at)}</h6>
-                                            <h6>{val.task_title}</h6>
-                                            {getTaskUrl(val.task_url)}
-                                            <p className='tasks-desc'>{val.task_desc}</p>
+                                <Draggable onDrag={(e, data) => trackPos(data)}>
+                                    <div key={i} className='col-lg-6 col-md-6 col-sm-12 content-item filter-mytask'>
+                                        <div className='card border-0 mt-3 rounded shadow p-0 w-100 position-relative'>
+                                            <button className='m-0 p-3 border-0 bg-transparent text-start' data-bs-toggle='modal' data-bs-target={modal_call}>
+                                                <h6 className='position-absolute tasks-date'><FontAwesomeIcon icon="fa-regular fa-clock" />{dateConverter(val.created_at)}</h6>
+                                                <h6>{val.task_title}</h6>
+                                                {getTaskUrl(val.task_url)}
+                                                <p className='tasks-desc'>{val.task_desc}</p>
 
-                                            {getAssigne(val.task_assigne)}
-                                            {getCheck(val.task_check)}
-                                            {getTaskPrize(val.task_prize)}
-                                            {getHashtag(val.task_tag)}
-                                            {getComment(val.total_comment)}
-                                            {getDueDate(val.due_date)}
-                                        </button>
-                                    </div>
-                                </div>  
+                                                {getAssigne(val.task_assigne)}
+                                                {getCheck(val.task_check)}
+                                                {getTaskPrize(val.task_prize)}
+                                                {getHashtag(val.task_tag)}
+                                                {getComment(val.total_comment)}
+                                                {getDueDate(val.due_date)}
+                                                {/* <h5>x: {position.x.toFixed(0)}, y: {position.y.toFixed(0)}</h5> */}
+                                            </button>
+                                        </div>
+                                    </div>  
+                                </Draggable>
                             );
                         })
                     }

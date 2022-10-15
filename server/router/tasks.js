@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 
 //Get all assigned tasks
 router.get('/getAllTask', (req, res) => {
-    connection.query('SELECT task.id, task.id_user, task_assigne, task_title, task_desc, task_url, task_check, task_prize, task_tag, due_date, task.created_at, task.updated_at,  CASE WHEN comment.id_task = task.id THEN count(1) ELSE 0 END AS total_comment FROM task left JOIN comment on task.id = comment.id_task GROUP by task.id', (error, rows, fields) => {
+    connection.query('SELECT task.id, task.id_user, task_assigne, task_title, task_desc, task_url, task_check, task_prize, task_tag, due_date, task_status, task.created_at, task.updated_at,  CASE WHEN comment.id_task = task.id THEN count(1) ELSE 0 END AS total_comment FROM task left JOIN comment on task.id = comment.id_task GROUP by task.id', (error, rows, fields) => {
         if (error) {
             res.status(500).send(error)
         } else {
@@ -20,7 +20,7 @@ router.get('/getAllTask', (req, res) => {
 
 //Get all unfinished tasks
 router.get('/getAllUnfinishedTask', (req, res) => {
-    connection.query('SELECT task.id, task.id_user, task_assigne, task_title, task_desc, task_url, task_check, task_prize, task_tag, due_date, task.created_at, task.updated_at,  CASE WHEN comment.id_task = task.id THEN count(1) ELSE 0 END AS total_comment FROM task left JOIN comment on task.id = comment.id_task WHERE task.task_status = "unfinished" GROUP by task.id', (error, rows, fields) => {
+    connection.query('SELECT task.id, task.id_user, task_assigne, task_title, task_desc, task_url, task_check, task_prize, task_tag, due_date, task_status, task.created_at, task.updated_at,  CASE WHEN comment.id_task = task.id THEN count(1) ELSE 0 END AS total_comment FROM task left JOIN comment on task.id = comment.id_task WHERE task.task_status = "unfinished" GROUP by task.id', (error, rows, fields) => {
         if (error) {
             res.status(500).send(error)
         } else {
@@ -205,6 +205,24 @@ router.put('/deleteTask', (req, res) => {
             res.status(400).json({ msg: "Error :" + error })
         } else {
             res.status(200).json({ msg: "Delete Success",status:200, data: rows })
+        }
+    })
+})
+
+//Edit task status
+router.put('/updateStatus', (req, res) => {
+    const id = req.body.id
+    const status = req.body.task_status
+    const updated_at = new Date()
+
+    connection.query("UPDATE " +
+        "task SET task_status = ?, updated_at = ? " +
+        "WHERE id = ? ",
+        [status, updated_at, id], (error, rows, fields) => {
+        if (error) {
+            res.status(400).json({ msg: "Error :" + error })
+        } else {
+            res.status(200).json({ msg: "Update Success",status:200, data: rows })
         }
     })
 })

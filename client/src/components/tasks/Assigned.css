@@ -124,6 +124,9 @@
     border-radius: 10px;
     margin: 5px;
 }
+.content-item{
+    z-index: 999;
+}
 
 /*Tasks box*/
 .content #filters {
