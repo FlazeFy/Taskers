@@ -18,6 +18,28 @@ router.get('/getAllTask', (req, res) => {
     })
 })
 
+//Get all unfinished tasks
+router.get('/getAllUnfinishedTask', (req, res) => {
+    connection.query('SELECT task.id, task.id_user, task_assigne, task_title, task_desc, task_url, task_check, task_prize, task_tag, due_date, task.created_at, task.updated_at,  CASE WHEN comment.id_task = task.id THEN count(1) ELSE 0 END AS total_comment FROM task left JOIN comment on task.id = comment.id_task WHERE task.task_status = "unfinished" GROUP by task.id', (error, rows, fields) => {
+        if (error) {
+            res.status(500).send(error)
+        } else {
+            res.status(200).json({ msg: rows.length + " Data retrived", status: 200, data: rows })
+        }
+    })
+})
+
+//Get all finished tasks
+router.get('/getAllFinishedTask', (req, res) => {
+    connection.query('SELECT task.id, task.id_user, task_assigne, task_title, task_desc, task_url, task_check, task_prize, task_tag, due_date, task.created_at, task.updated_at,  CASE WHEN comment.id_task = task.id THEN count(1) ELSE 0 END AS total_comment FROM task left JOIN comment on task.id = comment.id_task WHERE task.task_status = "finished" GROUP by task.id', (error, rows, fields) => {
+        if (error) {
+            res.status(500).send(error)
+        } else {
+            res.status(200).json({ msg: rows.length + " Data retrived", status: 200, data: rows })
+        }
+    })
+})
+
 //Add new tasks
 router.post('/insertTask/:id', (req, res) => {
     const id = req.params.id;
@@ -48,9 +70,9 @@ router.post('/insertTask/:id', (req, res) => {
     //Task assigne is id user only and task url is null for now.
 
     connection.query("INSERT INTO " +
-        "task (id, id_user, task_assigne, task_title, task_desc, task_url, task_check, task_prize, task_tag, created_at, updated_at) " +
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-        [null, id, id, title, desc, null, check, prize, tag, created_at, updated_at], (error, rows, fields) => {
+        "task (id, id_user, task_assigne, task_title, task_desc, task_url, task_check, task_prize, task_tag, due_date, task_status, created_at, updated_at) " +
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+        [null, id, id, title, desc, null, check, prize, tag, null, 'unfinished', created_at, updated_at], (error, rows, fields) => {
         if (error) {
             res.status(400).json({ msg: "Error :" + error })
         } else {

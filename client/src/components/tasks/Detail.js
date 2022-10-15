@@ -665,6 +665,10 @@ const Detail = (props) => {
                                     <div className='col-11'>
                                         <h6 className='username'>{username} <span className='comment-date text-secondary'>... minutes ago</span></h6>
                                         <a>{val.reply}</a>
+                                        <div className='config-box-reply'>
+                                            <a className="btn btn-icon-comment float-end" title='Copy' onClick={() => {navigator.clipboard.writeText(val.reply)}}>
+                                                <FontAwesomeIcon icon="fa-regular fa-copy"/></a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

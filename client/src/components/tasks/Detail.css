@@ -88,3 +88,8 @@
     background: white;
     border: 3px solid #2A6FD8;
 }
+.config-box-reply{
+    position: absolute;
+    right: 0px;
+    top:15px;
+}

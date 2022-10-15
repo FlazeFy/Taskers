@@ -1,5 +1,5 @@
-.container {
-  max-width: 720px;
+.container .content {
+  max-width: 1080px;
   padding: 10px;
 }
 .text-primary{
@@ -53,8 +53,9 @@ input.edit{
   padding: 8px;
 }
 .form-control-custom-comment{
-  border: none;
+  border: 2px solid #f0f1f5;
   margin-inline: auto;
+  margin:5px;
   display: block;
   text-align: left;
   padding: 10px;
