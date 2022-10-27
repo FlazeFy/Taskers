@@ -30,6 +30,18 @@ const Finished = () => {
         setTaskList(response.data.data);
     };
 
+    //Clear all finished
+    async function clearFinishedTask (e) {
+        const title = e.target.value;
+        
+        // e.preventDefault();
+        try {
+            await Axios.put("http://localhost:9000/clearAll/1", {});
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
+
     //Converter
     const data = Object.values(tasks);
     //console.log(data);
@@ -163,9 +175,23 @@ const Finished = () => {
         }
     }
 
+    //Get clear finished button
+    function getClearButton(length){
+        if(length > 0){
+            return (
+                <form onSubmit={clearFinishedTask}>
+                    <button className='btn btn-link-clear text-dark' title="Clear all finished task"><FontAwesomeIcon icon="fa-solid fa-trash" /> Clear</button>
+                </form>
+            );
+        } else {
+            return null;
+        }
+    }
+
     return (
         <div className='finished-box'>
             <h5>Finished 🎉</h5>
+            {getClearButton(data.length)}
             <div className='task-finished-holder'>
             {
                 data.map((val, i, index) => {

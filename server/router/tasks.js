@@ -250,4 +250,19 @@ router.put('/deleteCheck', (req, res) => {
     })
 })
 
+//Delete all finished task
+router.put('/clearAll/:id', (req, res) => {
+    const id = req.params.id
+
+    connection.query("DELETE FROM " +
+        "task WHERE task_status = ? AND id_user ",
+        ['finished' ,id], (error, rows, fields) => {
+        if (error) {
+            res.status(400).json({ msg: "Error :" + error })
+        } else {
+            res.status(200).json({ msg: "Delete Success",status:200, data: rows })
+        }
+    })
+})
+
 module.exports = router

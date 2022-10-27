@@ -6,6 +6,8 @@
     margin-top: 8vh;
     position: fixed;
     background: #b8e0d2;
+    z-index: 1;
+    position: relative;
 }
 .finished-item{
     border-radius: 6px;
@@ -16,7 +18,13 @@
     overflow: auto;
     height: 94%;
 }
-
+.btn-link-clear{
+    position: absolute;
+    top: 3px;
+    right: 0px;
+    font-weight: 500;
+    color:#df4759 !important;
+}
 
 .finished-box ::-webkit-scrollbar {
     width: 10px;

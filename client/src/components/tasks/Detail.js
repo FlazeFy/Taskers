@@ -217,7 +217,7 @@ const Detail = (props) => {
     async function editStatus (e) {
         const task_status = status;
         
-        e.preventDefault();
+        //e.preventDefault();
         try {
             await Axios.put("http://localhost:9000/updateStatus", {
                 task_status,
