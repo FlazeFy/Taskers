@@ -39,7 +39,9 @@
 .text-optional{
     color:#9854cb;
 }
-
+.text-deadline{
+    color:#e74645;
+}
 /*Button*/
 .btn-more-content{
     border: none;

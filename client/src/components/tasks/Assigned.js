@@ -7,7 +7,7 @@ import tes from '../image/tes.jpg';
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquareCheck, faClock, faUser } from "@fortawesome/free-regular-svg-icons";
-import { faGift, faHashtag, faAngleDown, faXmark, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faGift, faHashtag, faAngleDown, faXmark, faTrash, faBell } from "@fortawesome/free-solid-svg-icons";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
 import Draggable from 'react-draggable';
 
@@ -16,7 +16,7 @@ import Axios from "axios";
 import Isotope from "isotope-layout";
 import matchesSelector from 'desandro-matches-selector';
 
-library.add( faSquareCheck, faClock, faUser, faGift, faHashtag, faAngleDown, faXmark, faTrash, faMessage );
+library.add( faSquareCheck, faClock, faUser, faGift, faHashtag, faAngleDown, faXmark, faTrash, faMessage, faBell );
 
 function Assigned() {
     //Initial variable
@@ -52,7 +52,7 @@ function Assigned() {
             setError(error);
           }
         )
-    }, [])
+    },[])
 
     function isotopeLayout(){
         //Isotope layout
@@ -114,9 +114,43 @@ function Assigned() {
         }
     }
 
+    //Get task due date notif
+    function getTaskDeadline(date){
+        if(date != null){
+            const diffInMs   = new Date(date) - new Date(Date.now())
+            const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+
+            if((diffInDays < 1.0 )&&(diffInDays > 0)){
+                if(diffInDays < 0.1){ //Ends 1 hours
+                    return (
+                        <a className='btn-detail tasks-icon-box text-deadline'>
+                            <FontAwesomeIcon icon="fa-solid fa-bell" size='lg' /> {"Ends in " + Math.floor(diffInMs / 1000 / 60) + " min"}
+                        </a>
+                    ); 
+                } else {
+                    return ( //Ends in more than 1 hours
+                        <a className='btn-detail tasks-icon-box text-deadline'>
+                            <FontAwesomeIcon icon="fa-solid fa-bell" size='lg' /> {"Ends in " + Math.floor(diffInMs / 1000 / 60 / 60) + " hour"}
+                        </a>
+                    );
+                }
+            } else if(diffInDays < 0) {
+                return ( //Deadline passed
+                    <a className='btn-detail tasks-icon-box text-deadline'>
+                        <FontAwesomeIcon icon="fa-solid fa-bell" size='lg' /> Late
+                    </a>
+                );
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
     //Get task person assigne
     function getAssigne(assigne){
-        if(assigne == id_key){
+        if(assigne == null){
             return (
                 <a className='btn-detail tasks-icon-box text-participant'>
                     <FontAwesomeIcon icon="fa-regular fa-user" size='lg' /> You
@@ -129,7 +163,7 @@ function Assigned() {
 
             return (
                 <a className='btn-detail tasks-icon-box text-participant'>
-                    <FontAwesomeIcon icon="fa-regular fa-user" size='lg' /> You and {data_assigne.length - 1} others
+                    <FontAwesomeIcon icon="fa-regular fa-user" size='lg' /> You and {data_assigne.length} others
                 </a>
             );
         }
@@ -200,6 +234,30 @@ function Assigned() {
             return (<h6 className='tasks-date mt-2 mb-0'>Due until : {result.getFullYear()}/{result.getMonth() + 1}/{result.getDate()} {result.getHours()}:{result.getMinutes()}</h6>);
         }
     }
+
+    //Get filter config
+    function getFilter_asg(assigne){
+        if(assigne != null){
+            return " filter-team ";
+        } else {
+            return " filter-mytask ";
+        }
+    }
+
+    function getFilter_deadline(date){
+        if(date != null){
+            const diffInMs   = new Date(date) - new Date(Date.now())
+            const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+
+            if(diffInDays < 1.0){
+                return " filter-deadline";
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
   
     if (error) {
       return <div>Error: {error.message}</div>;
@@ -209,7 +267,7 @@ function Assigned() {
       return (
         <section id="content" className="content">
             <div className="container">
-                <h6 className=''>({}) All Task</h6>
+                <h6 className=''>All Task</h6>
                 <ul id='filters' className='filters-button-group d-flex justify-content-center'>
                     <button data-filter='*' className='filter-active btn border-0 bg-transparent fw-bold'>All</button>
                     <button data-filter='.filter-mytask' className='btn border-0 bg-transparent fw-bold'>My Task</button>
@@ -227,7 +285,7 @@ function Assigned() {
 
                             return ( //Key still error
                                 <Draggable onDrag={(e, data) => trackPos(data)}>
-                                    <div key={i} className='col-lg-6 col-md-6 col-sm-12 content-item filter-mytask'>
+                                    <div key={i} className={'col-lg-6 col-md-6 col-sm-12 content-item ' + getFilter_asg(val.task_assigne) + getFilter_deadline(val.due_date)}>
                                         <div className='card border-0 mt-3 rounded shadow p-0 w-100 position-relative'>
                                             <button className='m-0 p-3 border-0 bg-transparent text-start' data-bs-toggle='modal' data-bs-target={modal_call}>
                                                 <h6 className='position-absolute tasks-date'><FontAwesomeIcon icon="fa-regular fa-clock" />{dateConverter(val.created_at)}</h6>
@@ -236,6 +294,7 @@ function Assigned() {
                                                 <p className='tasks-desc'>{val.task_desc}</p>
 
                                                 {getAssigne(val.task_assigne)}
+                                                {getTaskDeadline(val.due_date)}
                                                 {getCheck(val.task_check)}
                                                 {getTaskPrize(val.task_prize)}
                                                 {getHashtag(val.task_tag)}
@@ -254,7 +313,7 @@ function Assigned() {
         </section>
       );
     }
-  }
+}
   
 
 export default Assigned;
