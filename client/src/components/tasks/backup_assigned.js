@@ -18,43 +18,7 @@ import matchesSelector from 'desandro-matches-selector';
 
 library.add( faSquareCheck, faClock, faUser, faGift, faHashtag, faAngleDown, faXmark, faTrash, faMessage );
 
-function Assigned() {
-    //Initial variable
-    const [error, setError] = useState(null);
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [items, setItems] = useState([]);
-    const [tasks, setTaskList] = useState([]);
-    const id_key = 1; //user id for now
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-
-    //Converter
-    const data = Object.values(items);
-    //console.log(data);
-
-    const trackPos = (data) => {
-        setPosition({ x: data.x, y: data.y });
-    };
-   
-    useEffect(() => {
-      fetch("http://localhost:9000/getAllUnfinishedTask")
-        .then(res => res.json())
-        .then(
-          (result) => {
-            setIsLoaded(true);
-            setItems(result.data);
-            isotopeLayout();
-          },
-          // Note: it's important to handle errors here
-          // instead of a catch() block so that we don't swallow
-          // exceptions from actual bugs in components.
-          (error) => {
-            setIsLoaded(true);
-            setError(error);
-          }
-        )
-    }, [])
-
-    function isotopeLayout(){
+const Assigned = (props) => {
         //Isotope layout
         var grid = document.querySelector('.content-container');
         var iso = new Isotope( grid, {
@@ -70,7 +34,30 @@ function Assigned() {
         filterValue = filterValue;
         iso.arrange({ filter: filterValue });
         });
-    }
+
+    //Initial variable
+    const [tasks, setTaskList] = useState([]);
+    const id_key = 1; //user id for now
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+    
+
+    useEffect(() => {
+        getAllTask();
+    }, []);
+
+    //Fetch data.
+    const getAllTask = async () => {
+        const response = await Axios.get("http://localhost:9000/getAllUnfinishedTask");
+        setTaskList(response.data.data);
+    };
+
+    //Converter
+    const data = Object.values(tasks);
+    //console.log(data);
+
+    const trackPos = (data) => {
+        setPosition({ x: data.x, y: data.y });
+     };
 
     //Date convert
     function dateConverter(datetime){
@@ -110,7 +97,7 @@ function Assigned() {
                 <a className='btn-detail tasks-icon-box text-gift'>
                     <FontAwesomeIcon icon="fa-solid fa-gift" size='lg' /> {prize}
                 </a>
-            );
+           );
         }
     }
 
@@ -200,21 +187,16 @@ function Assigned() {
             return (<h6 className='tasks-date mt-2 mb-0'>Due until : {result.getFullYear()}/{result.getMonth() + 1}/{result.getDate()} {result.getHours()}:{result.getMinutes()}</h6>);
         }
     }
-  
-    if (error) {
-      return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
-      return <div>Loading...</div>;
-    } else {
-      return (
+
+    return (
         <section id="content" className="content">
             <div className="container">
-                <h6 className=''>({}) All Task</h6>
+                <h6 className=''>({data.length}) All Task</h6>
                 <ul id='filters' className='filters-button-group d-flex justify-content-center'>
                     <button data-filter='*' className='filter-active btn border-0 bg-transparent fw-bold'>All</button>
                     <button data-filter='.filter-mytask' className='btn border-0 bg-transparent fw-bold'>My Task</button>
                     <button data-filter='.filter-team' className='btn border-0 bg-transparent fw-bold'>Team</button>
-                <button data-filter='.filter-deadline' className='btn border-0 bg-transparent fw-bold'>Deadline</button>
+                    <button data-filter='.filter-deadline' className='btn border-0 bg-transparent fw-bold'>Deadline</button>
                     <button data-filter='.filter-pinned' className='btn border-0 bg-transparent fw-bold'>Pinned</button>
                 </ul>
                 <div className='row content-container'>
@@ -250,11 +232,8 @@ function Assigned() {
                         })
                     }
                 </div>
+                <button className='btn-more-content'><FontAwesomeIcon icon="fa-solid fa-angle-down" /> Show More</button>
             </div>
         </section>
-      );
-    }
-  }
-  
-
-export default Assigned;
+    );
+}
