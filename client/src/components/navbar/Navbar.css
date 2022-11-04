@@ -33,7 +33,6 @@ li.nav-item a:hover{
 .btn-add-new-archieve, .btn-add-new-archieve:hover{
     background: #2a6fdb;
     color:whitesmoke;
-    border-radius: 6px;
 }
 .btn-task{
     border:0px;

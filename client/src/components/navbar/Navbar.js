@@ -5,6 +5,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faRightFromBracket, faBars, faBoxArchive, faCheck } from "@fortawesome/free-solid-svg-icons";
+import Axios from "axios";
 
 library.add( faPlus, faRightFromBracket, faBars, faBoxArchive, faCheck );
 
@@ -15,6 +16,7 @@ function Navbar() {
     const [error, setError] = useState(null);
     const [items, setItems] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [archiveName, setArchiveName] = useState(""); //for archive
 
     //Converter
     const data = Object.values(items);
@@ -36,6 +38,18 @@ function Navbar() {
         }
         )
     },[])
+
+    //Update task prize
+    const newArchive = async (e) => {
+        try {
+            await Axios.post("http://localhost:9000/insertArchive", {
+                archiveName,
+                id_key
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
 
     if (error) {
         return <div>Error: {error.message}</div>;
@@ -76,14 +90,15 @@ function Navbar() {
                             {
                                 data.map((val, i) => {
                                     return(
-                                        <li><input hidden name="archive_name" value=""></input><button className="dropdown-item" type="submit"> {val.archive_name}</button></li>
+                                        <li className='mb-1'><input hidden name="archive_name" value=""></input><button className="dropdown-item rounded" type="submit"> {val.archive_name}</button></li>
                                     );
                                 })
                             }
                         </form>
-                        <form action="" method="POST">
-                            <li><button className="dropdown-item btn-add-new-archieve" type="submit"> Add New Archieve</button></li>
-                        </form>
+                        <span className="collapse" id="add-archive">
+                            <input className="input-tag w-100 mb-1 py-1" type="text" onChange={(e) => setArchiveName([e.target.value])} onBlur={newArchive} name="archive_name"></input>
+                        </span>
+                        <li><a className="dropdown-item btn-add-new-archieve rounded" data-bs-toggle="collapse" href="#add-archive"> Add New Archieve</a></li>
                     </ul>
                 </span>
                 <span className='position-absolute btn-wrap-task'>

@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
     res.send('Welcome to taskers')
 })
 
-//Get all comment
+//Get all archive
 router.get('/getAllArchive/:id', (req, res) => {
     const id = req.params.id; //user id
     connection.query('SELECT * FROM archive WHERE id_user = '+ id +' order by updated_at', (error, rows, fields) => {
@@ -15,6 +15,36 @@ router.get('/getAllArchive/:id', (req, res) => {
             res.status(500).send(error)
         } else {
             res.status(200).json({ msg: rows.length + " Data retrived", status: 200, data: rows })
+        }
+    })
+})
+
+//Add archive
+router.post('/insertArchive', (req, res) => {
+    const archiveName = req.body.archiveName
+    const id_user = req.body.id_key
+
+    const created_at = new Date()
+    const updated_at = new Date()
+
+    //Validate name.
+    connection.query("SELECT * FROM archive WHERE id_user = "+ id_user +" AND archive_name = '"+ archiveName +"'", (errorCheck, check, fields) => {
+        if (errorCheck) {
+            res.status(400).json({ msg: "Error :" + errorCheck })
+        } else if(check.length == 0){
+            //If name is available.
+            connection.query("INSERT INTO " +
+                "archive (id, id_user, archive_name, created_at, updated_at) " +
+                "VALUES (?, ?, ?, ?, ?)", 
+                [null, id_user, archiveName, created_at, updated_at], (error, rows, fields) => {
+                if (error) {
+                    res.status(400).json({ msg: "Error :" + error })
+                } else {
+                    res.status(200).json({ msg: "Insert Archive Success",status:200, data: rows })
+                }
+            })
+        } else {
+            res.status(200).json({ msg: "Insert Archive Failed, please use unique archive name",status:200, data: check })
         }
     })
 })
