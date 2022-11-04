@@ -40,7 +40,10 @@
 .finished-box ::-webkit-scrollbar-thumb:hover {
     background: #8c8c8c; 
 }
-
+.finished.tasks-date{
+    top:10px;
+    right:10px;
+}
 @media screen and (max-width: 992px) {
     .finished-box{
         position: static;

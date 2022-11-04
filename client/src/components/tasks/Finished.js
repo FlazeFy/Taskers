@@ -219,7 +219,7 @@ function Finished() {
                             <div key={i} className='content-item finished-item filter-mytask'>
                                 <div className='card border-0 rounded shadow p-0 w-100 position-relative'>
                                     <button className='m-0 p-2 border-0 bg-transparent text-start' data-bs-toggle='modal' data-bs-target={modal_call}>
-                                        <h6 className='position-absolute tasks-date'><FontAwesomeIcon icon="fa-regular fa-clock" />{dateConverter(val.created_at)}</h6>
+                                        <h6 className='position-absolute finished tasks-date'><FontAwesomeIcon icon="fa-regular fa-clock" />{dateConverter(val.created_at)}</h6>
                                         <h6>{val.task_title}</h6>
                                         {getTaskUrl(val.task_url)}
                                         <p className='tasks-desc'>{val.task_desc}</p>

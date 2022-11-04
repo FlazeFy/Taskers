@@ -20,13 +20,33 @@ li.nav-item a:hover{
     right: 140px;
     top: 5px;
 }
+.btn-wrap-archieve{
+    filter: drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.3));
+    right: 200px;
+    top: 5px;
+}
 .btn-wrap-sign-out{
     filter: drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.3));
     right: 80px;
     top: 5px;
 }
-
+.btn-add-new-archieve, .btn-add-new-archieve:hover{
+    background: #2a6fdb;
+    color:whitesmoke;
+    border-radius: 6px;
+}
 .btn-task{
+    border:0px;
+    background: #2a6fdb;
+    padding: 10px;
+    width: 45px;
+    height: 50px;
+    color: whitesmoke;
+    display: inline-block;
+    font-size:initial;
+    clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+}
+.btn-archieve{
     border:0px;
     background: #2a6fdb;
     padding: 10px;
@@ -67,8 +87,11 @@ li.nav-item a:hover{
     font-size:initial;
     clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
 }
-.btn-wrap-task:hover, .btn-wrap-sign-out:hover{
+.btn-wrap-task:hover, .btn-wrap-sign-out:hover, .btn-wrap-archieve:hover{
     top:15px;
     transition: ease-in-out 0.5s;
+}
+.btn-wrap-archieve .dropdown-menu{
+    z-index:999999 !important; /*Still not in front of content-item*/
 }
 
