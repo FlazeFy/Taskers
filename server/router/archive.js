@@ -19,6 +19,7 @@ router.get('/getAllArchive/:id', (req, res) => {
     })
 })
 
+//Get all archive relation with task
 router.get('/getAllArchiveRel/:id', (req, res) => {
     const id = req.params.id; //user id
     connection.query('SELECT archive_relation.id, archive.id as id_archive, task.id as id_task, archive.archive_name ' +
@@ -59,6 +60,18 @@ router.post('/insertArchive', (req, res) => {
             })
         } else {
             res.status(200).json({ msg: "Insert Archive Failed, please use unique archive name",status:200, data: check })
+        }
+    })
+})
+
+//Delete archive relation with task
+router.delete('/deleteArchiveRel/:id', (req, res) => {
+    const id = req.params.id;
+    connection.query('DELETE FROM archive_relation WHERE id = '+ id, (error, rows, fields) => {
+        if (error) {
+            res.status(500).send(error)
+        } else {
+            res.status(200).json({ msg: rows.length + " Data retrived", status: 200, data: rows })
         }
     })
 })

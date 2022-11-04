@@ -577,7 +577,7 @@ const Detail = (props) => {
                     </div>
                 </div>
                 <div className='config-box'>
-                    <a className="btn btn-icon-comment float-end" title='Delete' data-bs-toggle="collapse" data-bs-target={clps_del_call}>
+                    <a className="btn btn-icon-delete float-end" title='Delete' data-bs-toggle="collapse" data-bs-target={clps_del_call}>
                         <FontAwesomeIcon icon="fa-solid fa-trash-can"/></a>
                     <a className="btn btn-icon-comment float-end" title='Edit' data-bs-toggle="collapse" href={clps_edit_call}>
                         <FontAwesomeIcon icon="fa-solid fa-edit"/></a>

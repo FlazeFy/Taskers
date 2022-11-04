@@ -13,6 +13,7 @@ const id_key = 1; //user id for now
 
 function ArchiveRelation({id_task}) {
     //Initial variable
+    const [id, setId] = useState(""); //for relation id
     const [error, setError] = useState(null);
     const [items, setItems] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -39,6 +40,17 @@ function ArchiveRelation({id_task}) {
         )
     },[])
 
+    //Delete Archive relation.
+    async function deleteArchiveRel(e){
+        //e.preventDefault();
+
+        try {
+            await Axios.delete("http://localhost:9000/deleteArchiveRel/"+id);
+        } catch (error) {
+            console.log(error.response);
+        }
+    }
+
     if (error) {
         return <div>Error: {error.message}</div>;
       } else if (!isLoaded) {
@@ -52,8 +64,13 @@ function ArchiveRelation({id_task}) {
                     data.map((val, index)=>{
                         if(val.id_task === id_task){
                             return (
-                                <div className="relation-item p-2"> {/*data-bs-toggle="collapse" data-bs-target={clps_call}*/}
+                                <div className="relation-item py-2"> {/*data-bs-toggle="collapse" data-bs-target={clps_call}*/}
                                     <button className='btn-archive-rel'>{val.archive_name}</button>
+                                    {/* Delete task */}
+                                    <form onSubmit={deleteArchiveRel} className="position-relative">
+                                        <button className="btn btn-icon-delete-archive" title='Delete' type='submit' onClick={(e) => setId(val.id)}>
+                                            <FontAwesomeIcon icon="fa-solid fa-trash-can"/></button>
+                                    </form>
                                 </div>
                             );
                         }

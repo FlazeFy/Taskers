@@ -69,7 +69,7 @@ input.edit{
 textarea {
   height: 100px !important;
 }
-.btn-icon, .btn-icon-comment{
+.btn-icon, .btn-icon-comment, .btn-icon-delete{
   color: #808080 !important;
 }
 .btn-icon:hover{
@@ -78,6 +78,10 @@ textarea {
 }
 .btn-icon-comment:hover{
   background: #2A6FD8 !important;
+  color:white !important;
+}
+.btn-icon-delete:hover{
+  background: #e74645 !important;
   color:white !important;
 }
 .username{

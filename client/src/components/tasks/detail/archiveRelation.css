@@ -3,11 +3,13 @@
     border-radius: 5px;
     background: white;
     color: #212529;
+    margin-top: -5px;
 }
 .relation-holder .relation-item {
     padding: 0 0 12px 12px;
-    bottom: -5px;
+    bottom: -15px;
     margin-top: -10px;
+    margin-bottom: 10px;
     border-left: 3px solid #309975;
     position: relative;
     margin-left:15px;
@@ -31,4 +33,15 @@
     top: 30%;
     background: #B8E0D2;
     border: 3px solid #309975;
+}
+.btn-icon-delete-archive{
+    color: #808080 !important;
+    margin-top:-10px;
+    position: absolute;
+    right: 0px;
+    top: -25px;
+}
+.btn-icon-delete-archive:hover{
+    background: #e74645 !important;
+    color:white !important;
 }
