@@ -39,7 +39,7 @@ function Navbar() {
         )
     },[])
 
-    //Update task prize
+    //Create new archive
     const newArchive = async (e) => {
         try {
             await Axios.post("http://localhost:9000/insertArchive", {

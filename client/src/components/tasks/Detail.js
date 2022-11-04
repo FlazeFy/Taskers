@@ -800,10 +800,6 @@ const Detail = (props) => {
                                             {getFinishedButton(val.id, val.task_status)}
                                             {/* Show Archive Relation with remove and add */}
                                             <ArchiveRelation id_task={val.id}/>
-                                            {/* Add to archieve */}
-                                            <form className="">
-                                                <button className='btn btn-success py-1 mt-1 w-100' onClick={(e) => setId(val.id)} >Add to Archieve</button>
-                                            </form>
                                         </div>
                                     </div>
                                 </div>

@@ -10,7 +10,7 @@
     bottom: -15px;
     margin-top: -10px;
     margin-bottom: 10px;
-    border-left: 3px solid #309975;
+    border-left: 3px solid #2a6fdb;
     position: relative;
     margin-left:15px;
 }
@@ -31,8 +31,8 @@
     border-radius: 50px;
     left: -10px;
     top: 30%;
-    background: #B8E0D2;
-    border: 3px solid #309975;
+    background: white;
+    border: 3px solid #2a6fdb;
 }
 .btn-icon-delete-archive{
     color: #808080 !important;

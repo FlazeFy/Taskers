@@ -64,6 +64,26 @@ router.post('/insertArchive', (req, res) => {
     })
 })
 
+//Insert task to archive
+router.post('/addArchiveRel/:id', (req, res) => {
+    const id = req.params.id;
+    const id_archive = req.body.id_archive
+    const id_task = req.body.task_id
+    const created_at = new Date()
+    const updated_at = new Date()
+
+    connection.query("INSERT INTO " +
+        "archive_relation (id, id_archive, id_user, id_task, created_at, updated_at) " +
+        "VALUES (?, ?, ?, ?, ?, ?)", 
+        [null, id_archive, id, id_task, created_at, updated_at], (error, rows, fields) => {
+        if (error) {
+            res.status(400).json({ msg: "Error :" + error })
+        } else {
+            res.status(200).json({ msg: "Insert Task to Archive Success",status:200, data: rows })
+        }
+    })
+})
+
 //Delete archive relation with task
 router.delete('/deleteArchiveRel/:id', (req, res) => {
     const id = req.params.id;
