@@ -19,6 +19,20 @@ router.get('/getAllArchive/:id', (req, res) => {
     })
 })
 
+router.get('/getAllArchiveRel/:id', (req, res) => {
+    const id = req.params.id; //user id
+    connection.query('SELECT archive_relation.id, archive.id as id_archive, task.id as id_task, archive.archive_name ' +
+        'FROM archive_relation JOIN archive ON archive.id = archive_relation.id_archive ' +
+        'JOIN task ON task.id = archive_relation.id_task WHERE archive_relation.id_user = ' + id + ' ' +
+        'ORDER BY archive_relation.created_at DESC', (error, rows, fields) => {
+        if (error) {
+            res.status(500).send(error)
+        } else {
+            res.status(200).json({ msg: rows.length + " Data retrived", status: 200, data: rows })
+        }
+    })
+})
+
 //Add archive
 router.post('/insertArchive', (req, res) => {
     const archiveName = req.body.archiveName
