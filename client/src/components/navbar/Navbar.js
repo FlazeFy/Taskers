@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faRightFromBracket, faBars, faBoxArchive, faCheck } from "@fortawesome/free-solid-svg-icons";
 import Axios from "axios";
+import { Outlet, Link } from "react-router-dom";
 
 library.add( faPlus, faRightFromBracket, faBars, faBoxArchive, faCheck );
 
@@ -60,7 +61,7 @@ function Navbar() {
         return (
             <div className='position-relative'>
                 <nav className='navbar navbar-expand-lg navbar-light'>
-                    <div className='container-fluid'>
+                    <div className='container-fluid ps-5'>
                         <b className='navbar-brand' href='#'>Taskers</b>
                         <button className='navbar-toggler border-0 btn-more p-0' type='button' data-bs-toggle='collapse' data-bs-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation'>
                             <span className='btn-more-inner'><FontAwesomeIcon icon="fa-bars" size='lg' /></span>
@@ -68,16 +69,16 @@ function Navbar() {
                         <div className='collapse navbar-collapse' id='navbarNav'>
                             <ul className='navbar-nav'>
                                 <li className='nav-item text-center'>
-                                    <a className='nav-link active' aria-current='page' href='#'>Tasks</a>
+                                    <a className='nav-link' aria-current='page'><Link to="/tasks">Tasks</Link></a>
                                 </li>
                                 <li className='nav-item text-center'>
-                                    <a className='nav-link' href='#'>Calendar</a>
+                                    <a className='nav-link'><Link to="/calendar">Calendar</Link></a>
                                 </li>
                                 <li className='nav-item text-center'>
-                                    <a className='nav-link' href='#'>Teams</a>
+                                    <a className='nav-link'><Link to="/teams">Teams</Link></a>
                                 </li>
                                 <li className='nav-item text-center'>
-                                    <a className='nav-link' href='#'>Rewards</a>
+                                    <a className='nav-link'><Link to="/archive">Archive</Link></a>
                                 </li>
                             </ul>
                         </div>
@@ -107,6 +108,9 @@ function Navbar() {
                 <span className='position-absolute btn-wrap-sign-out'>
                     <button className='btn-sign-out' title='Sign Out'><FontAwesomeIcon icon="fa-right-from-bracket" /></button>
                 </span>
+                <div className='container d-block mx-auto px-1'>
+                    <Outlet />
+                </div>
             </div>
         );
     }

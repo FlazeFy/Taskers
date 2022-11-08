@@ -266,8 +266,7 @@ function Assigned() {
     } else {
       return (
         <section id="content" className="content">
-            <div className="container">
-                <h6 className=''>All Task</h6>
+            <div className="container p-0">
                 <ul id='filters' className='filters-button-group d-flex justify-content-center'>
                     <button data-filter='*' className='filter-active btn border-0 bg-transparent fw-bold'>All</button>
                     <button data-filter='.filter-mytask' className='btn border-0 bg-transparent fw-bold'>My Task</button>
