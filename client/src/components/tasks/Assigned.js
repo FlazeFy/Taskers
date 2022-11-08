@@ -86,11 +86,11 @@ function Assigned() {
             // } else {
             //     return "Today " + result.getHours() + ":" + result.getMinutes();    
             // }
-            return "Today at " + result.getHours() + ":" + result.getMinutes();
+            return "Today at " + ("0" + result.getHours()).slice(-2) + ":" + ("0" + result.getMinutes()).slice(-2);
         } else if(result.toDateString() === yesterday.toDateString()){
-            return "Yesterday at" + " " + result.getHours() + ":" + result.getMinutes();
+            return "Yesterday at" + " " + ("0" + result.getHours()).slice(-2) + ":" + ("0" + result.getMinutes()).slice(-2);
         } else {
-            return " " + result.getFullYear() + "/" + (result.getMonth() + 1) + "/" + result.getDate() + " " + result.getHours() + ":" + result.getMinutes();  
+            return " " + result.getFullYear() + "/" + (result.getMonth() + 1) + "/" + ("0" + result.getDate()).slice(-2) + " " + ("0" + result.getHours()).slice(-2) + ":" + ("0" + result.getMinutes()).slice(-2);  
         }
     }
 
@@ -231,7 +231,7 @@ function Assigned() {
             return null;
         } else {
             const result = new Date(datetime);
-            return (<h6 className='tasks-date mt-2 mb-0'>Due until : {result.getFullYear()}/{result.getMonth() + 1}/{result.getDate()} {result.getHours()}:{result.getMinutes()}</h6>);
+            return (<h6 className='tasks-date mt-2 mb-0'>Due until : {result.getFullYear()}/{result.getMonth() + 1}/{("0" + result.getDate()).slice(-2)} {("0" + result.getHours()).slice(-2)}:{("0" + result.getMinutes()).slice(-2)}</h6>);
         }
     }
 

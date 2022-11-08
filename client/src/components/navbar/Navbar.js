@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faRightFromBracket, faBars, faBoxArchive, faCheck } from "@fortawesome/free-solid-svg-icons";
 import Axios from "axios";
+import NewTask from '../tasks/NewTask';
 import { Outlet, Link } from "react-router-dom";
 
 library.add( faPlus, faRightFromBracket, faBars, faBoxArchive, faCheck );
@@ -110,6 +111,9 @@ function Navbar() {
                 </span>
                 <div className='container d-block mx-auto px-1'>
                     <Outlet />
+
+                    {/* Modal */}
+                    <NewTask/>
                 </div>
             </div>
         );
