@@ -56,6 +56,12 @@ a{
   cursor:pointer;
   text-decoration: none;
 }
+.btn-success-inner{
+  color:#309975 !important;
+}
+.btn-danger-inner{
+  color:#e74645 !important;
+}
 .form-control{
   border-radius: 15px !important;
 }

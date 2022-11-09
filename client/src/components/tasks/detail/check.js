@@ -139,10 +139,10 @@ const GetCheckDetail = ({check_pass, id_task}) => {
                                     <div className="edit_check_box p-2 position-relative">
                                         {/* Edit Task checklist */}
                                         <form onSubmit={editCheck}>
-                                                <input required type="text" defaultValue={val.detail} onBlur={(e) => setIdCheck(val.id)} onChange={(e) => setCheckDetail([e.target.value, check_pass])} 
-                                                    className="form-check-edit w-100 mb-3"></input>
-                                                <button type='submit' onClick={(e) => setId(id_task)} className='btn btn-success py-1' title='Save Check'>Save</button>
-                                                <a className='btn-close-clps ms-3' data-bs-dismiss="collapse"><FontAwesomeIcon icon="fa-solid fa-xmark" size='lg' /></a>
+                                            <input required type="text" defaultValue={val.detail} onBlur={(e) => setIdCheck(val.id)} onChange={(e) => setCheckDetail([e.target.value, check_pass])} 
+                                                className="form-check-edit w-100 mb-3"></input>
+                                            <button type='submit' onClick={(e) => setId(id_task)} className='btn btn-success py-1' title='Save Check'>Save</button>
+                                            <a className='btn-close-clps ms-3' data-bs-dismiss="collapse"><FontAwesomeIcon icon="fa-solid fa-xmark" size='lg' /></a>
                                         </form>
                                         {/* Remove Task checklist */}
                                         <form onSubmit={deleteCheck} className='d-inline'>

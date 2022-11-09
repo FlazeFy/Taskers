@@ -1,0 +1,26 @@
+.accordion-body{
+    padding:0px;
+    padding-top: 10px;
+    margin:0px;
+}
+.accordion-item{
+    border:none;
+}
+.accordion-button{
+    padding-left: 0px;
+    font-weight: 500;
+    color: #414141 !important;
+}
+.accordion-button:not(.collapsed){
+    background: white !important;
+    color: #2a6fdb !important;
+    box-shadow: none;
+}
+.btn-delete-task-calendar{
+    right: 10px;
+    top: 10px;
+}
+.btn-finish-task-calendar{
+    left: 10px;
+    top: 10px;
+}

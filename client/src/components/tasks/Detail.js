@@ -10,63 +10,20 @@ import Axios from "axios";
 import ArchiveRelation from './detail/archiveRelation';
 import GetHashtag from './detail/hashtag';
 import GetCheckDetail from './detail/check';
+import GetDesc from './detail/desc';
+import GetTitle from './detail/title';
+import GetPrize from './detail/prize';
+import GetDueDate from './detail/duedate';
+import GetComment from './detail/comment';
 
 library.add( faPlus, faRightFromBracket, faBars, faArrowsRotate, faPaperclip, faEdit, faTrashCan, faCopy, faReply, faRepeat, faCheck );
 
 const Detail = (props) => {
     const [tasks, setTaskList] = useState([]);
-    const [comments, setCommentList] = useState([]);
-    const [replies, setReplyList] = useState([]);
     const id_key = 1; //user id for now
-    const [desc, setDesc] = useState("");
-    const [prize, setPrize] = useState("");
     const [status, setStatus] = useState("");
-    const [comment, setComment] = useState("");
-    const [reply, setReply] = useState("");
     // const [task_check, setCheck] = useState("");
     const [id, setId] = useState(""); //for task id
-    const [id_comment, setIdComment] = useState(""); 
-
-    //Update task description
-    const editDesc = async (e) => {
-        e.preventDefault();
-        try {
-            await Axios.put("http://localhost:9000/updateDesc", {
-                desc,
-                id
-            });
-        } catch (error) {
-            console.log(error.response);
-        }
-    };
-
-    //Update task prize
-    const editPrize = async (e) => {
-        e.preventDefault();
-        try {
-            await Axios.put("http://localhost:9000/updatePrize", {
-                prize,
-                id
-            });
-        } catch (error) {
-            console.log(error.response);
-        }
-    };
-
-    //Update task title
-    async function editTitle (e) {
-        const title = e.target.value;
-        
-        e.preventDefault();
-        try {
-            await Axios.put("http://localhost:9000/updateTitle", {
-                title,
-                id
-            });
-        } catch (error) {
-            console.log(error.response);
-        }
-    };
 
     //Update task status
     async function editStatus (e) {
@@ -77,66 +34,6 @@ const Detail = (props) => {
             await Axios.put("http://localhost:9000/updateStatus", {
                 task_status,
                 id
-            });
-        } catch (error) {
-            console.log(error.response);
-        }
-    };
-
-    //Comment task
-    const sendComment = async (e) => {
-        var id_task = id;
-        
-        e.preventDefault();
-        try {
-            await Axios.post("http://localhost:9000/insertComment/1", {
-                id_task,
-                comment
-            });
-        } catch (error) {
-            console.log(error.response);
-        }
-    };
-
-    //Reply Comment task
-    const sendReply = async (e) => {
-        e.preventDefault();
-
-        const task_id = id_comment[0];
-        const comment_id = id_comment[1];
-
-        try {
-            await Axios.post("http://localhost:9000/insertReply/1", {
-                task_id,
-                comment_id,
-                reply
-            });
-        } catch (error) {
-            console.log(error.response);
-        }
-    };
-
-    //Update task due date
-    //Bugg... cant update date and time at the same moment. one of these will set as default
-    async function editDueDate (e) {
-        const due_date_old = new Date(id[1]);
-        const type = id[2]; // Type of due date change. "date" and "time"
-        const due_date_new = e.target.value;
-        const id_task = id[0];
-        var due_date;
-        
-        //console.log(id_task);
-        //Set update by its input type
-        if(type == "date"){
-            due_date = due_date_new + " " + due_date_old.getHours() + ":" + due_date_old.getMinutes();
-        } else {
-            due_date = due_date_old.getFullYear() + "-" + (due_date_old.getMonth() + 1) + "-" + due_date_old.getDate() + " " + due_date_new;
-        }
-
-        try {
-            await Axios.put("http://localhost:9000/updateDueDate", {
-                due_date,
-                id_task
             });
         } catch (error) {
             console.log(error.response);
@@ -154,67 +51,14 @@ const Detail = (props) => {
         }
     }
 
-    //Edit comment.
-    async function editComment(e){
-        e.preventDefault();
-
-        try {
-            await Axios.put("http://localhost:9000/editComment/" + id_comment, {
-                comment
-            });
-        } catch (error) {
-            console.log(error.response);
-        }
-    }
-
-    //Delete comment.
-    async function deleteComment(e){
-        e.preventDefault();
-
-        try {
-            await Axios.put("http://localhost:9000/deleteComment", {
-                id_comment
-            });
-        } catch (error) {
-            console.log(error.response);
-        }
-    }
-
-    //Update task due date (set null)
-    async function deleteDueDate (e) {
-        const due_date = null;
-        const id_task = id;
-        e.preventDefault();
-
-        //console.log(id);
-        try {
-            await Axios.put("http://localhost:9000/updateDueDate", {
-                due_date,
-                id_task
-            });
-        } catch (error) {
-            console.log(error.response);
-        }
-    };
-
     useEffect(() => {
         getAllTask();
-        getAllComment();
-        getAllReply();
     }, []);
 
     //Fetch data.
     const getAllTask = async () => {
         const response = await Axios.get("http://localhost:9000/getAllTask");
         setTaskList(response.data.data);
-    };
-    const getAllComment = async () => {
-        const response = await Axios.get("http://localhost:9000/getAllComment");
-        setCommentList(response.data.data);
-    };
-    const getAllReply = async () => {
-        const response = await Axios.get("http://localhost:9000/getAllReply");
-        setReplyList(response.data.data);
     };
 
     //Converter
@@ -242,193 +86,18 @@ const Detail = (props) => {
         }
     }
 
-    //Get task tag msg
-    function getMsgNull(val){
-        if(val == null){
-            return (
-                <h6 className='fw-bold'>-</h6>
-            );
-        }
-    }
-
-    function getCommentSet(id, id_comment, comment){
-        const id_user = 1;
-        const clps_reply_key = "clps_reply_comment_" + id_comment;
-        const clps_reply_call = "#clps_reply_comment_"+ id_comment;
-
-        if(id == id_user){
-            const accrd_key = "accrd_comment_" + id_comment;
-            const accrd_call = "#accrd_comment_"+ id_comment;
-            
-            const clps_del_key = "clps_del_comment_" + id_comment;
-            const clps_del_call = "#clps_del_comment_"+ id_comment;
-            const clps_edit_key = "clps_edit_comment_" + id_comment;
-            const clps_edit_call = "#clps_edit_comment_"+ id_comment;
-
-            return (
-            <div className="position-relative" >
-                <div className='mt-1 accordion' id={accrd_key}>
-                    <div className='collapse' id={clps_del_key} data-bs-parent={accrd_call}>
-                        {/* Delete comment */}
-                        <form onSubmit={deleteComment}>
-                            <button type='submit' onClick={(e) => setIdComment(id_comment)} className='btn btn-danger py-1 mt-2 w-25'>Delete</button>
-                        </form>
-                    </div>
-                    <div className='collapse' id={clps_edit_key} data-bs-parent={accrd_call}>
-                        {/* Edit comment */}
-                        <form onSubmit={editComment}>
-                            <textarea type="text" className="form-control edit" id="floatingInput"
-                                defaultValue={comment} onChange={(e) => setComment(e.target.value)}></textarea>
-                            <button type='submit' onClick={(e) => setIdComment(id_comment)} className='btn btn-success py-1 mt-2 w-25'>Save</button>
-                        </form>
-                    </div>
-                    <div className='collapse' id={clps_reply_key} data-bs-parent={accrd_call}>
-                        {/* Show reply */}
-                        {getReply(id_comment)}
-
-                        {/* Send reply */}
-                        <form onSubmit={sendReply}>
-                            <input className="form-control-custom-comment my-2" placeholder="Write a reply..." onChange={(e) => setReply(e.target.value)} required></input>
-                            <div className="position-relative">
-                                <button className="btn btn-success py-1 mt-1" onClick={(e) => setIdComment([id, id_comment])} type='submit'>Send</button>
-                                <button className="btn btn-icon py-1 mt-1 float-end" title='Attach a File'><FontAwesomeIcon icon="fa-solid fa-paperclip"/></button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div className='config-box'>
-                    <a className="btn btn-icon-delete float-end" title='Delete' data-bs-toggle="collapse" data-bs-target={clps_del_call}>
-                        <FontAwesomeIcon icon="fa-solid fa-trash-can"/></a>
-                    <a className="btn btn-icon-comment float-end" title='Edit' data-bs-toggle="collapse" href={clps_edit_call}>
-                        <FontAwesomeIcon icon="fa-solid fa-edit"/></a>
-                    <a className="btn btn-icon-comment float-end" title='Copy' onClick={() => {navigator.clipboard.writeText(comment)}}>
-                        <FontAwesomeIcon icon="fa-regular fa-copy"/></a>
-                    <a className="btn btn-icon-comment float-end" title='Reply' data-bs-toggle="collapse" href={clps_reply_call}>
-                        <FontAwesomeIcon icon="fa-solid fa-reply"/></a>
-                </div>
-            </div>);
-        } else {
-            const accrd_key = "accrd_comment_" + id_comment;
-            const accrd_call = "#accrd_comment_"+ id_comment;
-
-            return (
-            <div className="position-relative"> {/*id={clps_key} data-bs-parent={accrd_call}*/}
-                <div className='mt-1 accordion' id={accrd_key}>
-                    <div className='collapse' id={clps_reply_key} data-bs-parent={accrd_call}>
-                        {/* Show reply */}
-                        {getReply(id_comment)}
-
-                        {/* Send reply */}
-                        <form onSubmit={sendReply}>
-                            <input className="form-control-custom-comment my-2" placeholder="Write a reply..." onChange={(e) => setReply(e.target.value)} required></input>
-                            <div className="position-relative">
-                                <button className="btn btn-success py-1 mt-1" onClick={(e) => setIdComment([id, id_comment])} type='submit'>Send</button>
-                                <button className="btn btn-icon py-1 mt-1 float-end" title='Attach a File'><FontAwesomeIcon icon="fa-solid fa-paperclip"/></button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <a className="btn btn-icon-comment float-end" title='Copy' onClick={() => {navigator.clipboard.writeText(comment)}}>
-                    <FontAwesomeIcon icon="fa-regular fa-copy"/></a>
-                <a className="btn btn-icon-comment float-end" title='Reply' data-bs-toggle="collapse" href={clps_reply_call}>
-                    <FontAwesomeIcon icon="fa-solid fa-reply"/></a>
-            </div>);
-        }
-    }
-
-    //Get comment
-    function getComment(id, total){
-        if(total == 0){
-            return null;
-        } else {
-            return (
-            <div>
-                <h6 className='total-comment my-1'>Show {total} comment</h6>
-                {
-                    comments.map((val, index) => {
-                        const clps_key = "clpsComment_" + val.id + "_" + index;
-                        const clps_call = "#clpsComment_"+ val.id + "_" + index;
-
-                        //Get username
-                        //user id = 1 for now.
-                        var username = "You";
-                        if(val.id_user != 1){
-                            username = val.id_user;
-                        }
-
-                        if(val.id_task == id){
-                            return (
-                                <div className="comment-box p-2" role="button" > {/*data-bs-toggle="collapse" data-bs-target={clps_call}*/}
-                                    <div className='row'>
-                                        <div className='col-1'>
-                                            <img src='https://i0.wp.com/tropicsofmeta.com/wp-content/uploads/2018/08/hitler-eyes-covered.png?fit=824%2C1084&ssl=1' className='profile-image-sm'></img>
-                                        </div>
-                                        <div className='col-11'>
-                                            <h6 className='username'>{username} <span className='comment-date text-secondary'>... minutes ago</span></h6>
-                                            <a>{val.comment}</a>
-                                            {/*Comment setting*/}
-                                            {getCommentSet(val.id_user, val.id, val.comment)}
-                                        </div>
-                                    </div>
-                                </div>
-                            );
-                        }
-                    })
-                }
-            </div>);
-        }
-    }
-
-    //Get reply
-    function getReply(id){
-        return (
-        <div className='reply-holder'>
-            {
-                replies.map((val, index) => {
-
-                    //Get username
-                    //user id = 1 for now.
-                    var username = "You";
-                    if(val.id_user != 1){
-                        username = val.id_user;
-                    }
-
-                    if(val.id_comment == id){
-                        return (
-                            <div className="reply-item p-2 ps-4" role="button" > {/*data-bs-toggle="collapse" data-bs-target={clps_call}*/}
-                                <div className='row'>
-                                    <div className='col-1'>
-                                        <img src='https://i0.wp.com/tropicsofmeta.com/wp-content/uploads/2018/08/hitler-eyes-covered.png?fit=824%2C1084&ssl=1' className='profile-image-sm'></img>
-                                    </div>
-                                    <div className='col-11'>
-                                        <h6 className='username'>{username} <span className='comment-date text-secondary'>... minutes ago</span></h6>
-                                        <a>{val.reply}</a>
-                                        <div className='config-box-reply'>
-                                            <a className="btn btn-icon-comment float-end" title='Copy' onClick={() => {navigator.clipboard.writeText(val.reply)}}>
-                                                <FontAwesomeIcon icon="fa-regular fa-copy"/></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        );
-                    }
-                })
-            }
-        </div>);
-    }
-
     //Get finished button
     function getFinishedButton(id, task_status){
         if(task_status == "unfinished"){
             return (
                 <form onSubmit={editStatus}>
-                    <button className='btn btn-success py-1 mt-1 w-100' onClick={(e) => [setId(id), setStatus('finished')]} ><FontAwesomeIcon icon="fa-solid fa-check"/> Finish Task</button>
+                    <button className='btn btn-success py-1 mt-1 w-100' onClick={(e) => [setId(id), setStatus('finished')]} >Set as done</button>
                 </form>
             );
         } else {
             return (
                 <form onSubmit={editStatus}>
-                    <button className='btn btn-danger py-1 mt-1 w-100' onClick={(e) => [setId(id), setStatus('unfinished')]} ><FontAwesomeIcon icon="fa-solid fa-repeat"/> Unfinished Task</button>
+                    <button className='btn btn-success-inner py-1 mt-1 w-100' onClick={(e) => [setId(id), setStatus('unfinished')]} title="Unfinish this Task"><FontAwesomeIcon icon="fa-solid fa-check"/> Finished Task</button>
                 </form>
             );
         }
@@ -448,18 +117,13 @@ const Detail = (props) => {
                                 <div className='modal-body position-relative px-3 py-4'>
                                     <button type='button' className='btn-close position-absolute' data-bs-dismiss='modal' aria-label='Close'></button>
                                     {/* Edit title */}
-                                    <input className='form-control-custom-title my-3' id='exampleModalLabel' defaultValue={val.task_title} onChange={(e) => setId(val.id)} onBlur={editTitle}></input>
+                                    <div className='mt-3'>
+                                        <GetTitle title_pass={val.task_title} id_task={val.id}/>
+                                    </div>
                                     <div className='row'>
                                         <div className='col-lg-6 col-md-12 col-sm-12'>
                                             {/* Edit description */}
-                                            <form onSubmit={editDesc}>
-                                                <div className='card mb-2 p-2'>
-                                                    <h6>Description</h6>
-                                                    <textarea type="text" className="form-check-edit edit" id="floatingInput"
-                                                        defaultValue={val.task_desc} onChange={(e) => setDesc(e.target.value)}></textarea>
-                                                    <button type='submit' onClick={(e) => setId(val.id)} className='btn btn-success py-1 mt-1 w-25' title='Save Check'>Save</button>
-                                                </div>
-                                            </form>
+                                            <GetDesc desc_pass={val.task_desc} id_task={val.id}/>
                                             <div className='card mb-2 p-2'>
                                                 <h6>Tags</h6>
                                                 {/* Show hashtag w/ tag management  */}
@@ -475,23 +139,12 @@ const Detail = (props) => {
                                             <div className='card mb-2 p-2'>
                                                 <h6>Prize</h6>
                                                 {/* Edit prize */}
-                                                <form onSubmit={editPrize}>
-                                                    <input type="text" className="form-check-edit edit me-2" id="floatingInput"
-                                                        defaultValue={val.task_prize} onChange={(e) => setPrize(e.target.value)}></input>
-                                                    <button type='submit' onClick={(e) => setId(val.id)} className='btn btn-success py-1 mt-1 w-25' title='Save Check'>Save</button>
-                                                </form>
+                                                <GetPrize prize_pass={val.task_prize} id_task={val.id}/>
                                             </div>
                                             <div className='card mb-2 p-2'>
                                                 <h6>Due Date</h6>
-                                                <div className='row'>
-                                                    {/* Delete due date */}
-                                                    <form onSubmit={deleteDueDate} className="form-reset-date me-2 p-2">
-                                                        <button className='btn-reset-date' onClick={(e) => setId(val.id)} type='submit'><FontAwesomeIcon icon="fa-solid fa-arrows-rotate" /></button>
-                                                    </form>
-                                                    {/* Edit due date */}
-                                                    <input type='date' className='form-control w-50 me-2' id='exampleModalLabel' defaultValue={val.due_date} onChange={(e) => setId([val.id, val.due_date, "date"])} onBlur={editDueDate}></input>
-                                                    <input type='time' className='form-control timepicker' id='exampleModalLabel' defaultValue={val.due_date} onChange={(e) => setId([val.id, val.due_date, "time"])} onBlur={editDueDate}></input>
-                                                </div>
+                                                {/* Edit due date */}
+                                                <GetDueDate duedate_pass={val.due_date} id_task={val.id}/>
                                             </div>
                                         </div>
                                     </div>
@@ -499,19 +152,7 @@ const Detail = (props) => {
                                     <hr></hr><div className='row'>
                                         <div className='col-lg-9 col-md-12 col-sm-12'>
                                             {/* Task comment */}
-                                            <div className='mb-2 p-2'>
-                                                <h6>Comment</h6> 
-                                                <div className='card add-comment-box p-2'>
-                                                    <form onSubmit={sendComment} className="">
-                                                        <input value={comment} className="form-control-custom-comment" placeholder="Write a comment..." onChange={(e) => setComment(e.target.value)} required></input>
-                                                        <div className="position-relative">
-                                                            <button className="btn btn-success py-1 mt-1" onClick={(e) => setId(val.id)} type='submit'>Send</button>
-                                                            <button className="btn btn-icon py-1 mt-1 float-end" title='Attach a File'><FontAwesomeIcon icon="fa-solid fa-paperclip"/></button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                {getComment(val.id, val.total_comment)}
-                                            </div>
+                                            <GetComment totalcomment_pass={val.total_comment} id_task={val.id}/>
                                         </div>
                                         <div className='col-lg-3 col-md-12 col-sm-12'>
                                             {/* Delete task */}
