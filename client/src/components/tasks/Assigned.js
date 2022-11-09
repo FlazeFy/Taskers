@@ -231,7 +231,7 @@ function Assigned() {
             return null;
         } else {
             const result = new Date(datetime);
-            return (<h6 className='tasks-date mt-2 mb-0'>Due until : {result.getFullYear()}/{result.getMonth() + 1}/{("0" + result.getDate()).slice(-2)} {("0" + result.getHours()).slice(-2)}:{("0" + result.getMinutes()).slice(-2)}</h6>);
+            return (<h6 className='tasks-date mt-2 mb-0'>Due until : {result.getFullYear()}/{("0" + (result.getMonth()+1)).slice(-2)}/{("0" + result.getDate()).slice(-2)} {("0" + result.getHours()).slice(-2)}:{("0" + result.getMinutes()).slice(-2)}</h6>);
         }
     }
 

@@ -42,9 +42,9 @@ const GetDueDate = ({duedate_pass, id_task}) => {
         //console.log(id_task);
         //Set update by its input type
         if(type == "date"){
-            due_date = due_date_new + " " + due_date_old.getHours() + ":" + due_date_old.getMinutes();
+            due_date = due_date_new + " " + ("0" + due_date_old.getHours()).slice(-2) + ":" + ("0" + due_date_old.getMinutes());
         } else {
-            due_date = due_date_old.getFullYear() + "-" + (due_date_old.getMonth() + 1) + "-" + due_date_old.getDate() + " " + due_date_new;
+            due_date = due_date_old.getFullYear() + "-" + ("0" + (due_date_old.getMonth()+1)).slice(-2) + "-" + ("0" + due_date_old.getDate()).slice(-2) + " " + due_date_new;
         }
 
         try {
