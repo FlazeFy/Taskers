@@ -1,0 +1,29 @@
+.fc-event-main{
+    background:#2A6FD8;
+    padding:0px 10px;
+    border-radius:6px;
+}
+.fc-h-event{
+    border:none;
+    border-radius:6px;
+}
+.fc-daygrid-event-dot{
+    border:calc(var(--fc-daygrid-event-dot-width,8px)/ 2) solid var(--fc-event-border-color, #198553);
+}
+.fc .fc-daygrid-day.fc-day-today{
+    background: rgba(42, 111, 216, 0.3);
+}
+.fc-event-time{
+    display:none;
+}
+.fc-event-title{
+    color: whitesmoke !important;
+    white-space: normal !important;
+    font-weight: 500;
+}
+/* .fc-daygrid-day-events{
+    display: flex;
+    flex-direction: column;
+    height: 80px;
+    overflow-y: scroll;
+} */

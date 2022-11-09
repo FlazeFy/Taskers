@@ -1,4 +1,5 @@
 import Day from "./Day";
+import DayDetail from "./DayDetail";
 
 
 const Calendar_Index = () => {
@@ -9,7 +10,7 @@ const Calendar_Index = () => {
                     <Day />
                 </div>
                 <div className='col-lg-4 col-md-12 col-sm-12'>
-                    
+                    <DayDetail />
                 </div>
             </div>
         </div>

@@ -1,5 +1,8 @@
+import './Day.css';
+
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from "@fullcalendar/interaction";
 import { useState, useEffect } from "react";
 import Axios from "axios";
 
@@ -37,32 +40,39 @@ function Day() {
             if(val.due_date != null){
                 const dd = new Date(val.due_date);
                 let date = dd.getFullYear().toString()+"-"+(dd.getMonth()+1).toString()+"-"+("0" + dd.getDate()).slice(-2).toString(); 
-                event.push({ title: val.task_title, date: date});
+                event.push({ title: val.task_title, date: date, id:val.id});
             }
         });
 
         return event;
     }
 
+    const handleEventClick = (arg) => {
+        localStorage.setItem('view_calendar_event', arg.event.id);
+        window.location.reload(false);
+    };
+
     if (error) {
         return <div>Error: {error.message}</div>;
-      } else if (!isLoaded) {
+    } else if (!isLoaded) {
         return <div>Loading...</div>;
-      } else {
+    } else {
         return (
             <div className='container d-block mx-auto p-1 mt-1'>
                 <section id="content" className="content">
                     <div className="container p-0">
                         <FullCalendar
-                            plugins={[ dayGridPlugin ]}
+                            plugins={[ dayGridPlugin, interactionPlugin ]}
                             initialView="dayGridMonth"
+                            editable={true}
                             events={getEvents(data)}
+                            eventClick={handleEventClick}
                         />
                     </div>
                 </section>
             </div>
         );
-      }
+    }
 }
 
 export default Day;
