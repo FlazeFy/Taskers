@@ -106,7 +106,7 @@ const GetComment = ({totalcomment_pass, id_task}) => {
 
                     if(val.id_comment == id){
                         return (
-                            <div className="reply-item p-2 ps-4" role="button" > {/*data-bs-toggle="collapse" data-bs-target={clps_call}*/}
+                            <div key={index} className="reply-item p-2 ps-4" role="button" > {/*data-bs-toggle="collapse" data-bs-target={clps_call}*/}
                                 <div className='row'>
                                     <div className='col-1'>
                                         <img src='https://i0.wp.com/tropicsofmeta.com/wp-content/uploads/2018/08/hitler-eyes-covered.png?fit=824%2C1084&ssl=1' className='profile-image-sm'></img>
@@ -235,7 +235,7 @@ const GetComment = ({totalcomment_pass, id_task}) => {
 
                         if(val.id_task == id){
                             return (
-                                <div className="comment-box p-2" role="button" > {/*data-bs-toggle="collapse" data-bs-target={clps_call}*/}
+                                <div key={val.id} className="comment-box p-2" role="button" > {/*data-bs-toggle="collapse" data-bs-target={clps_call}*/}
                                     <div className='row'>
                                         <div className='col-1'>
                                             <img src='https://i0.wp.com/tropicsofmeta.com/wp-content/uploads/2018/08/hitler-eyes-covered.png?fit=824%2C1084&ssl=1' className='profile-image-sm'></img>

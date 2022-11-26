@@ -92,7 +92,7 @@ function Navbar() {
                             {
                                 data.map((val, i) => {
                                     return(
-                                        <li className='mb-1'><input hidden name="archive_name" value=""></input><button className="dropdown-item rounded" type="submit"> {val.archive_name}</button></li>
+                                        <li className='mb-1' key={i}><input hidden name="archive_name" value=""></input><button className="dropdown-item rounded" type="submit"> {val.archive_name}</button></li>
                                     );
                                 })
                             }

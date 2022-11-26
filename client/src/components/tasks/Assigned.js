@@ -214,7 +214,7 @@ function Assigned() {
                     {
                     data_tag.map((val, index) => {
                         return (
-                            <a className='btn-detail tasks-icon-box text-optional'>
+                            <a className='btn-detail tasks-icon-box text-optional' key={index}>
                                 <FontAwesomeIcon icon="fa-solid fa-hashtag" />{val.tag}
                             </a>
                         );
@@ -284,7 +284,7 @@ function Assigned() {
 
                             return ( //Key still error
                                 <Draggable onDrag={(e, data) => trackPos(data)}>
-                                    <div key={i} className={'col-lg-6 col-md-6 col-sm-12 content-item ' + getFilter_asg(val.task_assigne) + getFilter_deadline(val.due_date)}>
+                                    <div key={val.id} className={'col-lg-6 col-md-6 col-sm-12 content-item ' + getFilter_asg(val.task_assigne) + getFilter_deadline(val.due_date)}>
                                         <div className='card border-0 mt-3 rounded shadow p-0 w-100 position-relative'>
                                             <button className='m-0 p-3 border-0 bg-transparent text-start' data-bs-toggle='modal' data-bs-target={modal_call}>
                                                 <h6 className='position-absolute tasks-date'><FontAwesomeIcon icon="fa-regular fa-clock" />{dateConverter(val.created_at)}</h6>

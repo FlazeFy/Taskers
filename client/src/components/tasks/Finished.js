@@ -164,7 +164,7 @@ function Finished() {
                     {
                     data_tag.map((val, index) => {
                         return (
-                            <a className='btn-detail tasks-icon-box text-optional'>
+                            <a className='btn-detail tasks-icon-box text-optional' key={index}>
                                 <FontAwesomeIcon icon="fa-solid fa-hashtag" />{val.tag}
                             </a>
                         );
@@ -216,7 +216,7 @@ function Finished() {
                         const modal_call = "#open-task-"+ val.id;
 
                         return ( //Key still error
-                            <div key={i} className='content-item finished-item filter-mytask'>
+                            <div key={val.id} className='content-item finished-item filter-mytask'>
                                 <div className='card border-0 rounded shadow p-0 w-100 position-relative'>
                                     <button className='m-0 p-2 border-0 bg-transparent text-start' data-bs-toggle='modal' data-bs-target={modal_call}>
                                         <h6 className='position-absolute finished tasks-date'><FontAwesomeIcon icon="fa-regular fa-clock" />{dateConverter(val.created_at)}</h6>

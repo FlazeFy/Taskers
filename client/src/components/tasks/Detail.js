@@ -111,7 +111,7 @@ const Detail = (props) => {
                     const modal_id = "open-task-"+ val.id;
 
                     return (
-                    <div className='modal fade' id={modal_id} aria-labelledby='exampleModalLabel' aria-hidden='true'>
+                    <div key={val.id} className='modal fade' id={modal_id} aria-labelledby='exampleModalLabel' aria-hidden='true'>
                         <div className='modal-dialog  modal-lg'>
                             <div className='modal-content border-0'>
                                 <div className='modal-body position-relative px-3 py-4'>

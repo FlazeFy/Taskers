@@ -95,7 +95,7 @@ const GetHashtag = ({tag_pass, id_task}) => {
                 {
                 data_tag.map((val, index) => {
                     return (
-                        <span className='box-tag'>
+                        <span className='box-tag' key={index}>
                             <a className='btn-detail tasks-icon-box text-optional'>
                                 <FontAwesomeIcon icon="fa-solid fa-hashtag" />{val.tag}
                             </a>

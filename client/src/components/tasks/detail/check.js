@@ -127,7 +127,7 @@ const GetCheckDetail = ({check_pass, id_task}) => {
                     const clps_key = "clpsCheck_" + id_task + "_" + index;
                     const clps_call = "#clpsCheck_"+ id_task + "_" + index;
                     return (
-                        <div className='row mt-1'>
+                        <div key={index} className='row mt-1'>
                             <div className='col-1'>
                                 <div className="form-check">
                                     <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"></input>

@@ -101,7 +101,7 @@ function ArchiveRelation({id_task}) {
                         if(val.id_task === id_task){
                             list_id.push(val.id_archive);
                             return (
-                                <div className="relation-item py-2"> {/*data-bs-toggle="collapse" data-bs-target={clps_call}*/}
+                                <div key={val.id} className="relation-item py-2"> {/*data-bs-toggle="collapse" data-bs-target={clps_call}*/}
                                     <button className='btn-archive-rel'>{val.archive_name}</button>
                                     {/* Delete task */}
                                     <form onSubmit={deleteArchiveRel} className="position-relative">
@@ -122,7 +122,7 @@ function ArchiveRelation({id_task}) {
                             return null;
                         } else {
                             return (
-                                <div className='row'>
+                                <div className='row' key={val.id}>
                                     <div className='col-9 py-1'>
                                         <h6 className='text-secondary'>{val.archive_name}</h6>
                                     </div>
