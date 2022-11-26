@@ -3,14 +3,16 @@
     left: 47.5%;
 }
 .input-info-desc{
-    right: -360%;
+    right: 10px;
+    top:5px;
     font-weight: 500;
-    font-size: 15px;
+    font-size: 12px;
 }
 .input-info-price{
-    right: -350%;
+    right: 10px;
+    top:5px;
     font-weight: 500;
-    font-size: 15px;
+    font-size: 12px;
 }
 .tags-icon{
     bottom: 5px !important;
